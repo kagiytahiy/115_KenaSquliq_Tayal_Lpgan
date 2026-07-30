@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>115年全國語文競賽 - 賽考利克泰雅語朗讀文章</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 加入 lamejs 前端 MP3 轉碼套件 -->
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+            background-image: url('Papak_Waqa.jpg');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            z-index: -1;
+        }
+
+        .atayal-pattern-bar {
+            height: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='40' viewBox='0 0 60 40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='60' height='40' fill='%23991B1B'/%3E%3Cpolygon points='30,5 55,20 30,35 5,20' fill='%23FFFFFF'/%3E%3Cpolygon points='30,10 45,20 30,30 15,20' fill='%23111827'/%3E%3Cpolygon points='30,15 35,20 30,25 25,20' fill='%23991B1B'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: 60px 40px;
+            box-shadow: 0 8px 10px -4px rgba(0,0,0,0.6), inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.6);
+            border-top: 2px solid #ef4444;
+            border-bottom: 2px solid #450a0a;
+            border-radius: 6px;
+        }
+
+        .atayal-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+        }
+
+        .chinese-text {
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            color: #4b5563;
+            font-family: 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+        }
+
+        .sentence-card {
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        .sentence-card:hover {
+            border-left: 4px solid #047857;
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .hidden-zh { display: none !important; }
+
+        .btn-control {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        .article-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(229, 231, 235, 0.6);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .level-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .level-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        h1 { font-family: 'Times New Roman', Times, serif; }
+
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .speed-selector {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #374151;
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px 24px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .word-highlight {
+            transition: all 0.15s ease-in-out;
+            padding: 0 2px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 relative">
+
+    <div class="max-w-4xl mx-auto relative">
+        <!-- 第 1 層：大首頁 (選組別) -->
+        <div id="home-view" class="view active">
+            <header class="text-center mb-10 pt-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-stone-900 mb-6 bg-white/90 inline-block px-8 py-3 rounded-full backdrop-blur-md border border-white/80 shadow-sm">
+                    <i class="fas fa-mountain mr-2 text-emerald-700"></i> 115年全國語文競賽臺灣原住民族語言朗讀
+                </h1>
+                
+                <h2 class="text-4xl md:text-5xl font-bold text-stone-900 mb-4 leading-snug tracking-wide font-serif relative inline-block bg-white/80 px-8 py-4 rounded-3xl backdrop-blur-md border border-white/60 shadow-sm">
+                    賽考利克泰雅語<br class="md:hidden">朗讀平臺
+                </h2>
+                
+                <div class="flex flex-wrap justify-center gap-4 mt-2 mb-4 relative z-10">
+                    <a href="https://language115.eduweb.tw/Module/Home/Index.php" target="_blank" class="bg-blue-600/90 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2 border border-white/50 backdrop-blur-sm">
+                        <i class="fas fa-globe"></i> 115年全國語文競賽
+                    </a>
+                    <button onclick="openAdminModal()" class="bg-amber-600/90 hover:bg-amber-700 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2 border border-white/50 backdrop-blur-sm">
+                        <i class="fas fa-cogs"></i> 管理平臺
+                    </button>
+                </div>
+
+                <br>
+                <p class="text-emerald-900 font-bold text-lg mt-2 flex items-center justify-center gap-3 bg-white/80 inline-flex px-6 py-2 rounded-full backdrop-blur-sm border border-white/60 shadow-sm">
+                    <i class="fas fa-leaf text-emerald-700"></i>
+                    請選擇您的部落
+                    <i class="fas fa-leaf text-emerald-700 transform -scale-x-100"></i>
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pb-10 px-4 md:px-0">
+                <!-- 國小組按鈕 -->
+                <div onclick="showCategory('elem')" class="level-card border-emerald-200 hover:border-emerald-500 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-200/40 rounded-bl-full -z-10 transition-transform group-hover:scale-150 duration-500"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-2 bg-emerald-500 transform translate-y-2 group-hover:translate-y-0 transition-transform"></div>
+                    
+                    <div class="w-24 h-24 mx-auto bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-3xl mb-6 group-hover:bg-gradient-to-br group-hover:from-emerald-500 group-hover:to-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm border border-emerald-100">
+                        <svg viewBox="0 0 100 100" class="w-14 h-14">
+                            <circle cx="32" cy="55" r="22" fill="#fcd34d"/><path d="M 12 40 Q 32 30 52 40" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="25" cy="52" r="2.5" fill="#1f2937"/><circle cx="39" cy="52" r="2.5" fill="#1f2937"/><path d="M 26 62 Q 32 68 38 62" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            <circle cx="68" cy="55" r="22" fill="#fef08a"/><path d="M 48 40 Q 68 30 88 40" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="61" cy="52" r="2.5" fill="#1f2937"/><circle cx="75" cy="52" r="2.5" fill="#1f2937"/><path d="M 62 62 Q 68 68 74 62" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-stone-800 mb-3">國小部落</h2>
+                    <p class="text-emerald-700 font-bold bg-emerald-50 inline-block px-4 py-1.5 rounded-full text-sm border border-emerald-100">4 篇文章已上架</p>
+                </div>
+
+                <!-- 國中組按鈕 -->
+                <div onclick="showCategory('junior')" class="level-card border-stone-200 hover:border-blue-500 group bg-white/90 backdrop-blur-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50/80 rounded-bl-full -z-10 transition-transform group-hover:scale-150 duration-500"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-2 bg-blue-500 transform translate-y-2 group-hover:translate-y-0 transition-transform"></div>
+
+                    <div class="w-24 h-24 mx-auto bg-gradient-to-br from-stone-100 to-stone-50 text-stone-500 rounded-full flex items-center justify-center text-3xl mb-6 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-blue-600 group-hover:text-white transition-all duration-300 shadow-sm border border-stone-200">
+                        <svg viewBox="0 0 100 100" class="w-14 h-14">
+                            <circle cx="30" cy="55" r="24" fill="#fcd34d"/><path d="M 8 38 Q 30 28 52 38" stroke="#1f2937" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="22" cy="51" r="2.5" fill="#1f2937"/><circle cx="38" cy="51" r="2.5" fill="#1f2937"/><path d="M 24 63 Q 30 67 36 63" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            <circle cx="70" cy="55" r="24" fill="#fef08a"/><path d="M 48 38 Q 70 28 92 38" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="62" cy="51" r="2.5" fill="#1f2937"/><circle cx="78" cy="51" r="2.5" fill="#1f2937"/><path d="M 64 63 Q 70 67 76 63" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-stone-800 mb-3">國中部落</h2>
+                    <p class="text-blue-700 font-bold bg-blue-50 border border-blue-200 inline-block px-4 py-1.5 rounded-full text-sm">4 篇文章已上架</p>
+                </div>
+
+                <!-- 高中組按鈕 -->
+                <div onclick="showCategory('senior')" class="level-card border-stone-200 hover:border-purple-600 group bg-white/90 backdrop-blur-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-purple-50/80 rounded-bl-full -z-10 transition-transform group-hover:scale-150 duration-500"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-2 bg-purple-600 transform translate-y-2 group-hover:translate-y-0 transition-transform"></div>
+
+                    <div class="w-24 h-24 mx-auto bg-gradient-to-br from-stone-100 to-stone-50 text-stone-500 rounded-full flex items-center justify-center text-3xl mb-6 group-hover:bg-gradient-to-br group-hover:from-purple-600 group-hover:to-purple-700 group-hover:text-white transition-all duration-300 shadow-sm border border-stone-200">
+                        <svg viewBox="0 0 100 100" class="w-14 h-14">
+                            <circle cx="30" cy="55" r="24" fill="#fcd34d"/><path d="M 28 35 L 28 43 M 30 34 L 30 44 M 32 35 L 32 43" stroke="#0f172a" stroke-width="1.5" opacity="0.5"/><path d="M 8 38 Q 30 28 52 38" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="22" cy="51" r="2.5" fill="#1f2937"/><circle cx="38" cy="51" r="2.5" fill="#1f2937"/><path d="M 24 62 Q 30 66 36 62" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 28 69 L 28 78 M 30 70 L 30 79 M 32 69 L 32 78" stroke="#0f172a" stroke-width="1.5" opacity="0.5"/>
+                            <circle cx="70" cy="55" r="24" fill="#fef08a"/><path d="M 68 35 L 68 43 M 70 34 L 70 44 M 72 35 L 72 43" stroke="#0f172a" stroke-width="1.5" opacity="0.5"/><path d="M 48 38 Q 70 28 92 38" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="62" cy="51" r="2.5" fill="#1f2937"/><circle cx="78" cy="51" r="2.5" fill="#1f2937"/><path d="M 64 63 Q 70 67 76 63" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 48 56 Q 60 72 70 64 Q 80 72 92 56" stroke="#0f172a" stroke-width="3" fill="none" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-stone-800 mb-3">高中部落</h2>
+                    <p class="text-purple-700 font-bold bg-purple-50 border border-purple-200 inline-block px-4 py-1.5 rounded-full text-sm">4 篇文章已上架</p>
+                </div>
+            </div>
+            
+            <div class="atayal-pattern-bar w-full max-w-3xl mx-auto mt-2 mb-8"></div>
+        </div>
+
+        <!-- 第 2 層：組別目錄 (選文章) -->
+        <div id="category-list-view" class="view">
+            <div class="mb-8 relative flex flex-col md:flex-row items-center justify-center border-b border-gray-300/50 pb-6 min-h-[60px] gap-4">
+                <button onclick="showHome()" class="md:absolute md:left-0 text-gray-700 hover:text-gray-900 font-bold flex items-center gap-2 transition-colors bg-white/85 backdrop-blur-md px-4 py-2 rounded-lg shadow-sm border border-white/50 z-10 w-full md:w-auto justify-center">
+                    <i class="fas fa-home"></i> 回大部落
+                </button>
+                <div class="flex items-center justify-center gap-3 bg-white/70 backdrop-blur-md px-6 py-2 rounded-2xl border border-white/60 shadow-sm">
+                    <div id="cat-icon-container" class="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-md border-2 border-white pointer-events-auto transition-colors">
+                        <i id="cat-icon" class="fas fa-child"></i>
+                    </div>
+                    <h2 id="cat-title" class="text-2xl md:text-3xl font-bold text-gray-900 drop-shadow-sm tracking-wide">部落名稱</h2>
+                </div>
+            </div>
+
+            <div id="article-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
+                <!-- 文章清單由 JS 動態產生 -->
+            </div>
+        </div>
+
+        <!-- 第 3 層：文章練習區 (包含智慧浮動的標題與建議列) -->
+        <div id="article-view" class="view relative">
+            <div class="bg-white/90 backdrop-blur-xl p-3 md:p-5 rounded-2xl shadow-md mb-8 border border-white/60 flex flex-col gap-3 sticky top-2 md:top-4 z-30 transition-all">
+                <div class="flex flex-wrap justify-between items-center gap-2 md:gap-4">
+                    <button onclick="backToCategory()" class="text-emerald-800 font-bold flex items-center gap-2 hover:text-emerald-900 transition-colors bg-emerald-50/80 px-3 md:px-4 py-2 rounded-lg border border-emerald-200 shadow-sm text-sm md:text-base">
+                        <i class="fas fa-arrow-left"></i> <span class="hidden sm:inline">返回目錄</span>
+                    </button>
+                    
+                    <div class="text-center flex-1 min-w-[140px]">
+                        <h2 id="current-article-title" class="text-lg md:text-2xl font-bold text-gray-900 font-serif italic drop-shadow-sm leading-tight"></h2>
+                        <h3 id="current-article-zh" class="text-xs md:text-sm text-gray-700 font-bold mt-1"></h3>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 bg-white/80 px-2 md:px-3 py-1.5 md:py-2 rounded-lg border border-gray-200 shadow-sm">
+                        <i class="fas fa-tachometer-alt text-gray-400"></i>
+                        <span class="text-xs md:text-sm font-bold text-gray-600 hidden md:inline">目前語速:</span>
+                        <select id="playback-speed" class="speed-selector speed-sync text-xs md:text-sm" onchange="syncSpeed(this.value)">
+                            <option value="0.25">極慢 (0.25x)</option>
+                            <option value="0.5">慢速 (0.5x)</option>
+                            <option value="1.0" selected>正常 (1.0x)</option>
+                            <option value="1.25">稍快 (1.25x)</option>
+                            <option value="1.5">快速 (1.5x)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4 border-t border-gray-300/50 pt-3">
+                    <button onclick="openSuggestionModal('word')" class="bg-blue-600/95 hover:bg-blue-700 text-white px-3 md:px-6 py-1.5 md:py-2 rounded-full font-bold shadow-md text-xs md:text-sm transition-transform hover:scale-105 flex items-center gap-1.5 border border-blue-400/50">
+                        <i class="fas fa-spell-check"></i> <span>單詞修正<span class="hidden sm:inline">建議</span></span>
+                    </button>
+                    <button onclick="openSuggestionModal('sentence')" class="bg-amber-600/95 hover:bg-amber-700 text-white px-3 md:px-6 py-1.5 md:py-2 rounded-full font-bold shadow-md text-xs md:text-sm transition-transform hover:scale-105 flex items-center gap-1.5 border border-amber-400/50">
+                        <i class="fas fa-align-left"></i> <span>句子修正<span class="hidden sm:inline">建議</span></span>
+                    </button>
+                    <button onclick="openSuggestionModal('audio')" class="bg-rose-600/95 hover:bg-rose-700 text-white px-3 md:px-6 py-1.5 md:py-2 rounded-full font-bold shadow-md text-xs md:text-sm transition-transform hover:scale-105 flex items-center gap-1.5 border border-rose-400/50">
+                        <i class="fas fa-microphone-alt"></i> <span>讀音修正<span class="hidden sm:inline">建議</span></span>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="article-content" class="space-y-4"></div>
+
+            <div class="mt-12 mb-8 text-center">
+                <button onclick="backToCategory()" class="bg-gray-800 text-white px-10 py-4 rounded-full font-bold shadow-lg hover:bg-gray-900 transition-all flex items-center justify-center mx-auto gap-3 hover:scale-105">
+                    <i class="fas fa-check-circle text-emerald-400"></i> 結束本篇練習
+                </button>
+            </div>
+        </div>
+
+        <!-- 第 4 層：管理平臺儀表板 -->
+        <div id="admin-dashboard-view" class="view">
+            <div class="bg-white/85 backdrop-blur-md p-4 md:p-6 rounded-2xl shadow-sm mb-6 border border-white/50 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-10">
+                <button onclick="showHome()" class="text-amber-800 font-bold flex items-center gap-2 hover:text-amber-900 transition-colors bg-amber-50/80 px-4 py-2 rounded-lg border border-amber-200 shadow-sm">
+                    <i class="fas fa-arrow-left"></i> 返回前臺
+                </button>
+                <div class="text-center flex-1 min-w-[200px]">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 flex items-center justify-center gap-3 drop-shadow-sm"><i class="fas fa-cogs text-amber-600"></i> 系統管理平臺</h2>
+                </div>
+                <div class="w-[100px] hidden md:block"></div>
+            </div>
+
+            <!-- 上線人數統計區 -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-stone-800 mb-4 flex items-center gap-2"><i class="fas fa-chart-line text-emerald-600"></i> 上線人數統計 (即時更新)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-white/60 shadow-sm text-center transform transition-transform hover:scale-105">
+                        <div class="text-stone-500 font-bold mb-1">今日</div>
+                        <div class="text-4xl font-black text-emerald-600" id="stat-today">--</div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-white/60 shadow-sm text-center transform transition-transform hover:scale-105">
+                        <div class="text-stone-500 font-bold mb-1">本週</div>
+                        <div class="text-4xl font-black text-emerald-600" id="stat-week">--</div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-white/60 shadow-sm text-center transform transition-transform hover:scale-105">
+                        <div class="text-stone-500 font-bold mb-1">本月</div>
+                        <div class="text-4xl font-black text-emerald-600" id="stat-month">--</div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-white/60 shadow-sm text-center transform transition-transform hover:scale-105">
+                        <div class="text-stone-500 font-bold mb-1">本年</div>
+                        <div class="text-4xl font-black text-emerald-600" id="stat-year">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 修正建議資料區 (接收並顯示 Firebase 資料) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10" id="admin-suggestion-cards">
+                <!-- 單詞建議 -->
+                <div class="bg-gray-50/90 backdrop-blur-md p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center pb-3 border-b border-gray-200/60"><i class="fas fa-font text-blue-500 mr-2"></i> 單詞修正建議</h3>
+                    <div id="word-suggestions-list" class="h-[400px] overflow-y-auto pr-2 no-scrollbar space-y-3">
+                        <div class="flex flex-col items-center justify-center h-full text-gray-400"><i class="fas fa-inbox text-4xl mb-3 opacity-50"></i><p class="font-bold">目前無新建議</p></div>
+                    </div>
+                </div>
+                <!-- 句子建議 -->
+                <div class="bg-gray-50/90 backdrop-blur-md p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center pb-3 border-b border-gray-200/60"><i class="fas fa-align-left text-amber-500 mr-2"></i> 句子修正建議</h3>
+                    <div id="sentence-suggestions-list" class="h-[400px] overflow-y-auto pr-2 no-scrollbar space-y-3">
+                        <div class="flex flex-col items-center justify-center h-full text-gray-400"><i class="fas fa-inbox text-4xl mb-3 opacity-50"></i><p class="font-bold">目前無新建議</p></div>
+                    </div>
+                </div>
+                <!-- 讀音建議 -->
+                <div class="bg-gray-50/90 backdrop-blur-md p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center pb-3 border-b border-gray-200/60"><i class="fas fa-microphone text-rose-500 mr-2"></i> 讀音修正建議</h3>
+                    <div id="audio-suggestions-list" class="h-[400px] overflow-y-auto pr-2 no-scrollbar space-y-3">
+                        <div class="flex flex-col items-center justify-center h-full text-gray-400"><i class="fas fa-inbox text-4xl mb-3 opacity-50"></i><p class="font-bold">目前無新建議</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-16 mb-8 py-6 px-4 bg-white/80 backdrop-blur-md border border-white/60 shadow-md rounded-2xl text-center text-stone-900 leading-relaxed max-w-3xl mx-auto">
+            <p class="text-2xl md:text-3xl text-stone-900 font-black drop-shadow-sm">115年全國語文競賽 - 賽考利克泰雅語 數位練習平臺</p>
+            <p class="mt-4 text-emerald-800 flex items-center justify-center gap-2 text-xl font-bold">
+                <i class="fas fa-info-circle text-2xl"></i> 
+                提示：點擊單字可自動發音提示，建議配搭整句原音練習。
+            </p>
+            <p class="mt-6 pt-5 border-t border-gray-400/30 text-lg text-stone-700 flex flex-wrap items-center justify-center gap-2 font-bold">
+                <i class="fas fa-envelope text-amber-600"></i>
+                <a href="mailto:kagiytahiy@gmail.com" class="hover:text-amber-700 hover:underline transition-colors">聯絡管理員：kagiytahiy@gmail.com</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- 段落連播小視窗 (Modal) -->
+    <div id="para-modal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex justify-center items-center p-4 md:p-6 transition-opacity backdrop-blur-md">
+        <div class="bg-white/90 backdrop-blur-xl rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border border-white/50">
+            <div class="bg-emerald-700/90 backdrop-blur-md text-white px-6 py-4 flex justify-between items-center shadow-md z-10">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-headphones-alt text-2xl text-emerald-200"></i>
+                    <h3 id="modal-title" class="text-xl md:text-2xl font-bold tracking-wide"></h3>
+                </div>
+                <button onclick="closeParagraphModal()" class="text-emerald-100 hover:text-white bg-emerald-700/50 hover:bg-emerald-700 p-2 rounded-full transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modal-content" class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50/50 no-scrollbar space-y-3 relative"></div>
+            <div class="bg-white/90 backdrop-blur-md border-t border-white/50 p-4 md:p-5 flex justify-center items-center gap-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10">
+                <button onclick="toggleModalPlay()" id="modal-play-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full font-bold shadow-lg transition-transform hover:scale-105 flex items-center gap-2 text-lg">
+                    <i class="fas fa-pause"></i> 暫停播放
+                </button>
+                <button onclick="closeParagraphModal()" class="text-gray-500 hover:text-gray-700 font-bold px-4 py-2 hover:bg-gray-100 rounded-full transition-colors">結束關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理員密碼輸入視窗 (Modal) -->
+    <div id="admin-modal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex justify-center items-center p-4 transition-opacity backdrop-blur-md">
+        <div class="bg-white/95 backdrop-blur-xl rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-white/50 p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-lock text-amber-500"></i> 管理平臺登入</h3>
+            <input type="password" id="admin-pwd" class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-lg tracking-widest" placeholder="請輸入密碼">
+            <p id="admin-error" class="text-red-500 text-sm hidden mb-4 font-bold"><i class="fas fa-exclamation-circle"></i> 密碼錯誤，請重新輸入</p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="closeAdminModal()" class="px-5 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-bold">取消</button>
+                <button onclick="verifyAdmin()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors font-bold shadow-md">確認登入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修正建議視窗 (Modal) -->
+    <div id="suggestion-modal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex justify-center items-center p-4 transition-opacity backdrop-blur-md">
+        <div class="bg-white/95 backdrop-blur-xl rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl border border-white/50 flex flex-col max-h-[90vh]">
+            <div id="suggestion-header" class="text-white px-6 py-4 flex justify-between items-center shadow-md z-10">
+                <h3 id="suggestion-title" class="text-xl font-bold tracking-wide flex items-center gap-2"></h3>
+                <button onclick="closeSuggestionModal()" class="text-white/70 hover:text-white p-2 rounded-full transition-colors"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50/50 no-scrollbar relative space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">姓名 (必填)</label>
+                        <input type="text" id="sug-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none" placeholder="請輸入姓名">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Email (必填)</label>
+                        <input type="email" id="sug-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none" placeholder="請輸入聯絡信箱">
+                    </div>
+                </div>
+
+                <div id="suggestion-items-container" class="space-y-4"></div>
+                
+                <div class="text-center mt-2">
+                    <button onclick="addSuggestionItem()" class="text-blue-600 bg-blue-50 hover:bg-blue-100 font-bold px-6 py-2 rounded-full border border-blue-200 transition-colors inline-flex items-center gap-2 shadow-sm">
+                        <i class="fas fa-plus"></i> 再加一筆修正
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-white/90 backdrop-blur-md border-t border-white/50 p-4 px-6 flex flex-col md:flex-row justify-between items-center z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] gap-4">
+                <p id="suggestion-error" class="text-red-500 text-sm font-bold hidden"><i class="fas fa-exclamation-circle"></i> 請填寫姓名與Email，並完成必填欄位。</p>
+                <div class="flex gap-3 ml-auto">
+                    <button onclick="closeSuggestionModal()" class="px-5 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors font-bold">取消</button>
+                    <button id="submit-sug-btn" onclick="submitSuggestion()" class="px-6 py-2.5 text-white rounded-lg transition-colors font-bold shadow-md flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i> 傳送建議
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio-player" style="display:none"></audio>
+    <div id="toast"></div>
+
+    <script>
+        const allArticles = [
+            // ========== 國小組 (4篇) ==========
+            {
+                id: "article-E1", category: "elem",
+                title: "'tayal ka wal m'yungay", zhTitle: "變猴的人 (第1號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "baqun mamu swa' mtalah qu qcyan na yungay pi, klanay simu qutux snbil ke' na binkesan sraral.", zh: "猴子的屁股為什麼是紅色的？告訴你們一個以前老人家留下的話。", audioFile: "115_A1_1_1" },
+                        { at: "'tayal sraral hiya mga, qngzyat balay mtzyuwaw ru mqumah ma, nanu qu pmhyun nha mga, ngahi, sehuy, qetun ru tmubux trakis uzi ma,", zh: "泰雅族以前非常勤勞的工作和耕作，他們種植的有地瓜、芋頭、豆子，也會播種小米，", audioFile: "115_A1_1_2" },
+                        { at: "tmasuq kmluh qu mlikuy hiya lmga, musa mlata tmrgyax lma,", zh: "男人收割完畢後，就會去山上打獵，", audioFile: "115_A1_1_3" },
+                        { at: "t'aring mspat ini ga mqeru kawas na kkneril lmga, si gluw yaya ru yata nya' mqbaq tminun ma.", zh: "女人從八、九歲開始，就會跟著媽媽和阿姨學習織布。", audioFile: "115_A1_1_4" },
+                        { at: "yasa qu qnxan na 'Tayal sraral.", zh: "這就是以前泰雅族的生活。", audioFile: "115_A1_1_5" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "ana ga, minnaki qutux mlikuy ru qutux kneril, ini ptasi qu rqyas nha,", zh: "但是，傳說有對夫妻非常懶惰，臉上沒有紋面，", audioFile: "115_A1_2_1" },
+                        { at: "baha hmswa ga, qlangan iyal ru ini kint'atu mtzyuwaw ma, nanu yasa qu ini swal mwah matas rqyas nha qu ppatas ma.", zh: "因為他們太懶散不勤奮工作，所以紋面師不願意幫他們紋面。", audioFile: "115_A1_2_2" },
+                        { at: "nanu saxa nha qani mga si giway lmosay te tanux ru msina nniqun squ squliq.", zh: "他們平常只會在外面閒晃，並向別人乞討食物。", audioFile: "115_A1_2_3" },
+                        { at: "yaqih balay ktan nqu 'tayal qalang nha ma.", zh: "部落裡的泰雅族人都非常看不起他們。", audioFile: "115_A1_2_4" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "taqu wal mtzyuwaw qmayah qu kwara 'tayal na qalang mga, si giway m'abi sa ngasal ma.", zh: "當部落所有的泰雅族人都去田裡工作時，他們卻只會待在家裡睡覺。", audioFile: "115_A1_3_1" },
+                        { at: "nanu cipuq balay qu qmayah nha ru ini inblaq mqumah ru ungat nanu qu knahul nha.", zh: "不好好除草耕地，田園沒什麼農作物。", audioFile: "115_A1_3_2" }
+                    ]},
+                    { pTitle: "第四段", sentences: [
+                        { at: "kya qutux ryax, musa qmayah nha qu rrusa squliq qani,", zh: "有天，這對夫妻到田園找東西，", audioFile: "115_A1_4_1" },
+                        { at: "tehuk qmayah lga, mnahu qu mlikuy hiya ru kmyuh ngahi qu kneril, aki nha statah plhbun.", zh: "到了田裡，男生生火，女生帶著小鋤頭挖地瓜，準備烤來吃。", audioFile: "115_A1_4_2" },
+                        { at: "tmrang tmatah ngahi kasa ga, zngyan nha pazih ru wal nha spglu qhutul mnahu qu pazih la.", zh: "烤地瓜的時候，他們忘了小鋤頭，把小鋤頭也當做柴火燒了。", audioFile: "115_A1_4_3" },
+                        { at: "mhuqil qu ngahi lga, mtama' sa rhzyal qu mlikuy ru aki' maniq ngahi',", zh: "地瓜熟了，男生坐在地上準備吃地瓜，", audioFile: "115_A1_4_4" },
+                        { at: "si tbah tboyak qu mlikuy kasa mha, \"kilux wah! kilux wah!\"", zh: "卻突然跳起來大叫：「好燙啊！好燙啊！」", audioFile: "115_A1_4_5" },
+                        { at: "ktan ni kneril nya cyux mtboyak mstopaw qu mlikuy nya, si nya ga cyux hmzyapas ru,", zh: "太太看見丈夫跳起來，以為他在開玩笑，", audioFile: "115_A1_4_6" },
+                        { at: "musa mtama sa rhzyal qasa uzi, aw baq sa baliq na pazih qu cyux nha tman,", zh: "也跑去坐在那個地方，沒想到是坐在燒紅的小鋤頭上，", audioFile: "115_A1_4_7" }, 
+                        { at: "tboyak mstopaw kmayal mha, \"kilux wah! kilux wah!\" mha uzi qu kneril kasa.", zh: "太太也跟著跳起來大叫：「好燙啊！好燙啊！」", audioFile: "115_A1_4_8" },
+                        { at: "si usa mkaraw qhuniq ru s'agal nha qara ka glgan abaw,", zh: "他們趕快爬到樹上，拿著有葉子的樹枝，", audioFile: "115_A1_4_9" },
+                        { at: "aki nha sbasaw kinkilux na qcyan nha,", zh: "想把屁股上的熱氣搧涼，", audioFile: "115_A1_4_10" },
+                        { at: "ana ga qzinah mkilux ru wal si qrqul sa qcyan nha ru, m'ngungu la,", zh: "但是越來越燙，樹枝居然卡在屁股上，變成了尾巴，", audioFile: "115_A1_4_11" },
+                        { at: "hbkan bukil uzi qu hi nha lma.", zh: "全身也都長出了毛。", audioFile: "115_A1_4_12" }
+                    ]},
+                    { pTitle: "第五段", sentences: [
+                        { at: "babaw nya lga, m'yungay qu rrusa' 'tayal kasa la,", zh: "後來這對泰雅族夫妻就變成了猴子，", audioFile: "115_A1_5_1" },
+                        { at: "taqu mtalah qcyan na yungay hiya ga, snuling nqu mkilux na pazih,", zh: "猴子紅色的屁股，是被燙紅的鋤頭燒的，", audioFile: "115_A1_5_2" },
+                        { at: "ngungu nha hiya ga, minqrqul nha qara na qhuniq.", zh: "他們的尾巴，則是卡住的樹枝。", audioFile: "115_A1_5_3" },
+                        { at: "kmal qu bnkis ta sraral mha,", zh: "以前的老人家告誡說，", audioFile: "115_A1_5_4" },
+                        { at: "ima qu mqilang ini kqngzyat mqyanux ga, iyat 'Tayal balay ma,", zh: "凡是懶惰不勤奮生活的人，就不算是真正的泰雅族人，", audioFile: "115_A1_5_5" },
+                        { at: "musa m'yungay ru si kaki sa lhlahuy, maniq bway na qhuniq ma.", zh: "會變成猴子住在森林裡，只能吃樹上的果子。", audioFile: "115_A1_5_6" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-E2", category: "elem",
+                title: "kinturu' ni yaya'", zhTitle: "媽媽的背影 (第2號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "trang saku' 'laqi' cikuy na' ga, ini' maku zngi qu \"kinturu ni yaya' maku\" ka zik musa' mtzyuwaw qmayah rgyax.", zh: "小時候，媽媽常上山工作，我無法忘記媽媽上山工作的背影。", audioFile: "115_A2_1_1" },
+                        { at: "trang nasa ga, kuzing ru sswe' maku' kneril nanak maki' ngasal.", zh: "那時候，家裡只剩我和妹妹兩個人。", audioFile: "115_A2_1_2" },
+                        { at: "musa' mtzyuwaw qmayah rgyax qu yaba' ki yaya' maku'. smozya' saku' gmluw sami maki' ngasal kwara'.", zh: "爸媽都去山上工作了，我很希望他們能留在屋裡陪我們。", audioFile: "115_A2_1_3" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "trang saku' mqwas biru' squ pqwasan 'laqi' cikuy ga, kya qutux ryax mhngaw squ ngasal qu yaya' maku'.", zh: "上小學後，有一天媽媽留在家裡休息。", audioFile: "115_A2_2_1" },
+                        { at: "kmagaw ru smrzyut qsahuy ngasal ru kbalay cingay blaq niqun na nniqun.", zh: "她不再上山，而是打掃家裡，並做了很多好吃的東西。", audioFile: "115_A2_2_2" },
+                        { at: "babaw kinryaxan, muwah ngasal myan qu qutux 'Tayal qalang ru kyalun nya' yaya' mha, \"mtakuy rgyax qu yaba' maku' ru ini' qbaq mhkangi' nanak.\"", zh: "到了下午，部落裡的一位泰雅族人來到我家，告訴媽媽：「爸爸在山上跌倒受傷，無法自己走路了。」", audioFile: "115_A2_2_3" },
+                        { at: "ru spanga' nha' stwan nha' ngasal qu yaba' maku'. ru mnglung saku' mha, \"ima qu psatu' yaba' musa' mita' nbu' sa hugal la?\"", zh: "他們把爸爸揹回家裡。我心裡想：「現在誰能帶爸爸去平地看病呢？」", audioFile: "115_A2_2_4" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "tmrang ini' kaki ngasal uzi qu qbsuzyan maku' mlikuy ka baq gmluw glgan.", zh: "當時會開車的哥哥也不在家。", audioFile: "115_A2_3_1" },
+                        { at: "si tuliq qu yaya'. srzyutun nya' lukus ni yaba' ru lukus rasun nya' ru shabuk spanga' nya' pala' qu yaba'. ru mhkangi' musa' mita' sinsiy phgup sa hugal.", zh: "媽媽立刻站起來，整理好爸爸的衣物，用布條揹起爸爸，決定步行帶爸爸下山就醫。", audioFile: "115_A2_3_2" }
+                    ]},
+                    { pTitle: "第四段", sentences: [
+                        { at: "ms'urux saku' tanux ngasal. mita' saku' kinturu' ni yaya' ka mpanga yaba' musa' mita' nbu'.", zh: "我站在屋外，看著媽媽準備行李，揹起爸爸，", audioFile: "115_A2_4_1" },
+                        { at: "aring sobih ru in_ggyut wal twahiq, hopa' ru in_ggyut wal cipuq qu inrkyasan nya'.", zh: "步伐由近及遠，身影漸漸變小。", audioFile: "115_A2_4_2" },
+                        { at: "mnglung saku' nanak. twahiq balay tuqi 'san ru 'usu balay qu yaba'. talagay siqan qu yaya' la! talagay lokah qu inlungan yaya'!", zh: "我不禁覺得媽媽好可憐！路途遙遠，爸爸又重，媽媽的心志真堅強！", audioFile: "115_A2_4_3" }
+                    ]},
+                    { pTitle: "第五段", sentences: [
+                        { at: "sami ka sswe' maku' kneril maki ngasal qu qutux ryax qasa. kinsuxan nya' ga, musa' sami mqwas biru' sa gako'.", zh: "那天家裡只剩我和妹妹。隔天我們依然去學校上課，", audioFile: "115_A2_5_1" },
+                        { at: "kun qu mlahang sswe' maku' kneril maki' ngasal.", zh: "由我負責照顧家裡的妹妹。", audioFile: "115_A2_5_2" },
+                        { at: "ana sami mngungu' ga, si sami qihul maki' ngasal. yalaw gi baqun myan ungat balay qbaqun ni yaya'.", zh: "雖然我們有些害怕，但還是忍耐了下來，因為我們知道媽媽別無選擇。", audioFile: "115_A2_5_3" }
+                    ]},
+                    { pTitle: "第六段", sentences: [
+                        { at: "babaw nya' mcisal sami ki yaya'. pqutan maku' mha, \"twahiq pinhkngyan su' ru mulu su' glgan la?\" kmal qu yaya' mha, \"tehuk saku' qalang Suru lga, gmluw saku' basu' la.\"", zh: "多年後，我問媽媽當時的情景：「妳走了多遠才搭到車？」媽媽說：「走到Suru部落才搭到公車。」", audioFile: "115_A2_6_1" },
+                        { at: "twahiq qu pinhkngyan nya' balay wah! kmal lozi yaya' mha, \"ini' maku' baqi minkahul inu' qu qpzing qani. ru si saku' gluw mnbu' uzi la.\"", zh: "她當時感覺到一股力量，沒想到也因此生病了。", audioFile: "115_A2_6_2" },
+                        { at: "misu qani mspat pgan zmagal qu kawas ni yaya' maku' la. wal in ggyut mbukut qu kinturu' ni yaya'.", zh: "現在媽媽85歲，背影已漸駝。", audioFile: "115_A2_6_3" },
+                        { at: "ini' k_yan sraral kinlokah qu hi' ni yaya' la. ana ga, wal maku' syun balay inlungan qu knita' maku' qinnxan ni yaya' maku'.", zh: "她的身體不再像以前那樣強壯了。但是，我將媽媽的生活點滴深烙在心裡。", audioFile: "115_A2_6_4" },
+                        { at: "hiya' ga, nyux qnzyat ru lokah balay gmalu' ru mlahang ngasal nya'.", zh: "她勤勞忍耐守護家人的精神，深植我心。", audioFile: "115_A2_6_5" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-E3", category: "elem",
+                title: "tmsuqan pinqwas biru' myan ryax qasa", zhTitle: "畢業典禮那一天 (第3號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "tayhuk balay ryax na tmsuqan pqwasan biru' lga, blaq balay inlungan myan kwara' musa' gaku ha.", zh: "畢業那天，我帶著很愉快的心情到學校。", audioFile: "115_A3_1_1" },
+                        { at: "aring balay musa' sami mthzyuk sa tman myan lga, inn_gyut mwah kwara' qu yaba' myan ka ptmasuq pqwasan qani la.", zh: "我們就座後，畢業生的家長們陸續進來。", audioFile: "115_A3_1_2" },
+                        { at: "ru min'aring kmayal kay qu tthawki lga, ini maku' baqi kwara' zyuwaw la. yalaw gi nyux saku' tmugun lruw!", zh: "長官們致詞後，我就打瞌睡了！後面的事都不知道了。", audioFile: "115_A3_1_3" },
+                        { at: "si saku' pung sa nyux mqwas kwara' gluw maku' lga, msqhnga saku' mtuliq la.", zh: "直到我聽見同學們開始唱歌，才慌忙起來。", audioFile: "115_A3_1_4" },
+                        { at: "sawn kasa lga yasa si qutux qutux mngilis qu lelaqi' kneril hya' la. ini' saku' ngilis kun gi nyux saku' misan mtuliq pinknguqu' maku' ruw.", zh: "那時每個女生都在哭泣，但我沒哭，因為我才剛睡醒呢！", audioFile: "115_A3_1_5" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "sawn kasa lga, 'nyal qutux 'laqi' kneril ka minthzyuk bih maku', biqan saku' nya' biru' bbrwan maha \"brwi cikay nanu' musa' su' skineng knan\" ma.", zh: "這時，坐在我旁邊的女生，她弟弟拿簿子給我，要我寫紀念的話。", audioFile: "115_A3_2_1" },
+                        { at: "ru wal mu brwan maha \"baqa utux klhangay su' na utux, aki blaq kwara' phkngyan su\" son mu miru'.", zh: "我在簿子上寫著：「願祖靈保佑妳，願妳萬事順心。」", audioFile: "115_A3_2_2" },
+                        { at: "aw ga ini' saku' nya' brwani kuzing hya', yan nasa qu inlungan na 'laqi' kneril hya' pi?", zh: "不過她並沒有寫給我，女孩子的心思是不是都這樣呢？", audioFile: "115_A3_2_3" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "ktan kwara' qu ggluw maku' lga, cyux si tmasuq mngilis kwara' nha'. ana sinsiy uzi ga cyux si gluw mngilis uzi.", zh: "同學們哭得很傷心，老師們也哭在一起。", audioFile: "115_A3_3_1" },
+                        { at: "ki'a nanak kun ru Tali' nanak sazing hi' ini' ngilis, gi lokah sami tcingun na sinsiy krayryax, gi ini' sami ksoya' mqwas biru' sami hya' ruw!", zh: "我猜只有我和Tali沒有哭，因為我們經常被老師打，我們很不喜歡讀書！", audioFile: "115_A3_3_2" }
+                    ]},
+                    { pTitle: "第四段", sentences: [
+                        { at: "ktan na yaba' maku' maha \"cyux maki tay tpucing balay lalu' myan\",", zh: "爸爸看見我們名字排在很後面，", audioFile: "115_A3_4_1" },
+                        { at: "ru mwah saku' ngasal lga, si saku' biqi qutux pkaruh ru soki' na yaba' mu kun.", zh: "回家後拿鋤頭跟鐮刀給我，", audioFile: "115_A3_4_2" },
+                        { at: "ru kmal maha \"ni, yani musa' su' baqun isu\" maha.", zh: "對我說：「你只能懂這些而已！」。", audioFile: "115_A3_4_3" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-E4", category: "elem",
+                title: "misan musa' mqwas biru' ssway' mu sa ryax qasa", zhTitle: "弟弟新生的那一天 (第4號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "misan musa' mqwas biru' qu ssway' maku' Watan Nawi, lalu' nya' Theluw ga Cang Tawe.", zh: "弟弟 Watan Nawi 中文名字是張大偉。剛開始上學去。", audioFile: "115_A4_1_1" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "t'aring mqwas biru' lga, rasun sami na yaya' mu musa' pbiru' lalu' nya' tay gaku.", zh: "剛入學時，媽媽帶他去教室報到。", audioFile: "115_A4_2_1" },
+                        { at: "rasun na yaya' musa' maybkuw sa 'awsa' nha' qsahuy na pqwasan nya' biru' hga, paybkgun na sinsiy nha' sa tanux na pqwasan nha' biru' ha.", zh: "媽媽帶他進教室前，老師先讓他們在外面排隊。", audioFile: "115_A4_2_2" },
+                        { at: "maki tay glayng qu rruq hya', ru maki tay suru qu wagiq hya', ga maki tay kska' Watan myan hya'.", zh: "老師讓矮的在前面，高的在後面，Watan在中間。", audioFile: "115_A4_2_3" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "aring kya pqutan na sinsiy lalu' nha' Theluw la. pzyux ini' qbaq sa lalu' nha' Theluw, gi bali minqwas yociyeng kwara' nha'.", zh: "老師問大家的中文名字，許多人不知道，因為他們並不是都讀過幼稚園。", audioFile: "115_A4_3_1" },
+                        { at: "pqutan na sinsiy i Watan myan hya' lga, si hwaw maha \"Watan Nawi\" maha smyuk.", zh: "當老師問到Watan，Watan 大聲叫「Watan Nawi!」", audioFile: "115_A4_3_2" },
+                        { at: "pawngan tay twahiq ga, yan balay cyux kmal maha \"Cang Tawe rwa!\"", zh: "遠遠聽起來就像在說：「張大偉啦！」", audioFile: "115_A4_3_3" },
+                        { at: "yasa qu biqan hancyo na sinsiy hiya' maha \"nanak isu baq kmayal lalu' na Theluw ma.\"", zh: "老師就讓他當班長，說：「只有你懂得說中文名字。」", audioFile: "115_A4_3_4" }
+                    ]},
+                    { pTitle: "第四段", sentences: [
+                        { at: "nanu' qsugan biru' na sinsiy lru biqan nha' lukus na gaku uzi.", zh: "老師發新書、制服給大家。", audioFile: "115_A4_4_1" },
+                        { at: "si na yaya' mu maha \"musa blaq musa' nama' ngasal lru\", wal ngasal hiya' la.", zh: "媽媽說：「你要乖，我先回家了」，媽媽就先回家去。", audioFile: "115_A4_4_2" },
+                        { at: "si ktay qu ssway' maku' Watan qasa hya' lga, ini' nya' ktay yaya' lga, mnkux kya lru, yasa si \"kyaya', yaya'!\" mngilis kya la.", zh: "弟弟沒有看見媽媽，緊張了起來，邊喊著「媽媽！媽媽！」邊哭了起來，", audioFile: "115_A4_4_3" },
+                        { at: "pawngan maku' ga ssway' mu balay qu cyux mngilis qasa, halan maku' mita' la.", zh: "我聽到弟弟的哭聲就過去看他，", audioFile: "115_A4_4_4" },
+                        { at: "ktan saku' nya' lru hmawh ngilis nya' la. si maku' rasi sa pqwasan maku' biru' la.", zh: "他看見我哭得更大聲，我只好帶他到我的教室，", audioFile: "115_A4_4_5" },
+                        { at: "sawbih kryaxan lga, tmasuq lqu musa' pbiru' lalu' gaku hya' la. mwah sami ngasal lga, ktan ni Watan yaya' lga, maymaw si hwaw mngilis lawzi la, qasa hya' ga cinhbku' nya' qasa hya' sa'.", zh: "報到結束回到家，Watan看到媽媽就大哭撒嬌。", audioFile: "115_A4_4_6" }
+                    ]}
+                ]
+            },
+
+            // ========== 國中組 (4篇) ==========
+            {
+                id: "article-J1", category: "junior",
+                title: "m'uyut bnu' wagi' na yaya' maku'", zhTitle: "媽媽過世的時候 (第1號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "\"aya'! aya ! cyux su' inu? ima' cyux smbes isu'?\" ryax nasa ga, ana si kgiq giq mqwalax ru msbehuy qu kayal ga, ini balay thyazi smru' qu qsliq maku'.", zh: "媽!您在哪?誰在陪您?!那天風雨交加,卻無法控制崩潰的心。", audioFile: "115_J1_1_1" },
+                        { at: "si saku tpaq' kintari sa rima m'slaq ka gleng buqul ni yaya' mu ru, si saku' ml'ax m'ngwi ngwi mngilis, ini balay baqi smpung kinm'uy na qsahuy maku'.", zh: "整個人癱在媽媽墳前嚎啕。", audioFile: "115_J1_1_2" },
+                        { at: "si ktehuq squ sman lga, memaw mkruy kwara qu hi' mu lru, si mu hluzi qu rima' mqarus ka hi' mu i musa mhngaw squ ngasal.", zh: "直到天亮，身體疲憊不堪，我才拖著沉重的身軀回家休息。", audioFile: "115_J1_1_3" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "tgazyaw saku' sa 'nbyan maku' Iga, nyux si nbah yan ega' m'bras bras mhtuw qu rqyas na yaya' mu ru inaras nya ska' qnxan,", zh: "媽媽身影如電影般浮現,", audioFile: "115_J1_2_1" },
+                        { at: "pyang balay nyux si trngil squ tunux maku' ga, yan qutux qutux sasan ini' klpaw nga, rima' m'klang klang qu tnobuy.", zh: "黎明備餐、", audioFile: "115_J1_2_2" },
+                        { at: "tuliq sami lga, rima' nya' suqun sm'an qu bzyoq ru masuq pqcya' ramat,", zh: "餵豬、澆菜，", audioFile: "115_J1_2_3" },
+                        { at: "ru nyux nya' sraxi tanux uzi qu minhqan na lukus, nyux sa nniqan qu aki myan sk'lama', yaqu yaya' hya' lga, rima' ini' baqi qu wal nya' 'san la.", zh: "洗衣晾乾等，然起身已不知去向。", audioFile: "115_J1_2_4" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "qutux qutux zik na p'muya ru klhan na pagay ga, ana m'keng keng mu' qu wagi' ga, yan balay na kikay qu qba' nya' i mqumah tmaroq squ rgyax na lituk slaq,", zh: "每當插秧割稻,媽媽的手像機器般除草,", audioFile: "115_J1_3_1" },
+                        { at: "ini nangi m'is ru agay qu hya' qani, ana nanu gzihung na zyaw ngasal ga, ini' nbah mcik ana cikuy qu roziq nya', mutu nya' si galiy sa kinyuhum inlungan nya maras squ ngasal qani.", zh: "未曾喊苦埋怨,堅忍帶領著家。", audioFile: "115_J1_3_2" },
+                        { at: "nanu kruma' mutu mu qriqun mita' yaya' mu gbyan ga, utux mtbaku' ru tmlux cyahaw squ blihun tanux i msquli' mita' babaw kayal.", zh: "飯後常見母親仰望天空,", audioFile: "115_J1_3_3" },
+                        { at: "mnglung saku' nanak mha, kya cingay balay qu qmtux na qsahuy nya, kya cyux hazi thbku pqzyu kin na yaba' yaya' nya' te babaw kayal, mha saku' mnglung.", zh: "定有說不出的苦,或許在向天上的父母撒嬌訴苦。", audioFile: "115_J1_3_4" }
+                    ]},
+                    { pTitle: "第四段", sentences: [
+                        { at: "zik 'osa yaya' maki' squ bzyoing ga, qutux qutux 'san mu smbyes ga, memaw yan nyux btaqan na qzi' qu qsahuy maku'.", zh: "想起母親住院時,滿身插管,", audioFile: "115_J1_4_1" },
+                        { at: "ktan nyux si 'buzi na gomu' kwara qu nqwaq, qolu' ru nguhuw nya' lga, ungat balay rngu' maku' ms'rux squ beh nya' mangay, nanu mutu ku' si pyang mgey tanux msbuq mngilis.", zh: "我只能假借到外哭泣。", audioFile: "115_J1_4_2" }
+                    ]},
+                    { pTitle: "第五段", sentences: [
+                        { at: "llungun kwara pinhkngyan na k'aya' mu ga, si saku' sqruw nanak mha, talagay! ima' aki' thuzay pktehuk squ minkngyan nya' qani la!", zh: "憶起母親的典範,肅然起敬,", audioFile: "115_J1_5_1" },
+                        { at: "spngun kin gnalu' mu squ yaya' mu ga, iyat nangi ptnaq ana na lilas na kin'uy nya',", zh: "比起母親對我的疼愛，她的辛勞是無法比擬的，", audioFile: "115_J1_5_2" },
+                        { at: "mosa nanak kahul squ zzik na qsahuy mu i tegalu' mha, aba' kayal, mhway su' ga swaliy kwara qu kinqihan nya' ru leqiy inblaq mtta' squ 'tuxan.", zh: "我只能默默祈求，願她回到祖靈的懷抱。", audioFile: "115_J1_5_3" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-J2", category: "junior",
+                title: "Smka gwagiy", zhTitle: "射日 (第2號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "Wayal mha qaniy p'ars ke' qu bnkis ta raral. Nanu squ raral hiya mga, qutux qu qwagiy ru krahu balay.", zh: "遠古以前,太陽是個大熱球。", audioFile: "115_J2_1_1" },
+                        { at: "mha ni smbu qu gwagiy ga yasa si sbu smka kawas ru ini baqiy smpung qu pptzyaw nha qlyan.", zh: "白天太陽一出來就是半年，讓人們無法安排工作。", audioFile: "115_J2_1_2" },
+                        { at: "Mha tehuk qu mlhngan lga, yasa si 'nkum smka kawas Ima, memaw ini baqiy smpung qu 'abi nqu squliq uzi ma.", zh: "到了夜晚，也是長達半年，讓人們連作息都難以決定。", audioFile: "115_J2_1_3" },
+                        { at: "Mkayal kwara qu mmrhuw na Tayal mha \"aki hmswa 'san ta smka qu gwagiy qaniy, teta minblaq maki qu qlyan ru mlhngan\".", zh: "於是長老們決議：「我們要去射擊太陽，讓日夜恢復正常。」", audioFile: "115_J2_1_4" },
+                        { at: "Namu yasa qu sgwayaw nha cyugal mrkyas na mlikuy ru si ptbuciy mpangan sa hbku na 'laqiy. rasun nha uzi.", zh: "長老挑選三位勇士,各自背著孩童去征服烈日。", audioFile: "115_J2_1_5" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "T'aring balay musa, in' gyutun nha hmutaw qpuri na bway ru ghap nqu trakis sa syaw na tuqiy, bsyaq bsyaq qu pinhkngyan nha lga, ini nha thkiy na qu htgan na gwagiy.", zh: "他們沿路播下果樹及小米種籽,以備回程之需。", audioFile: "115_J2_2_1" },
+                        { at: "Sawn kasa lga, m'bnkis ru tqryan qu minnaras ka cyugal qasa, wayal min-gyut mhuqil lhgan la. Yaqu pinnanga nha qu 'mubuy musa smka gwagiy Ima.", zh: "後來,三位勇士相繼離世,由孩童接續征服太陽的任務。", audioFile: "115_J2_2_2" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "Qlung tehuk squ htgan nqu gwagiy Iga, ini baqiy mksobih gi mkilux balay qu gwagiy qasa, stlqing nha ru ngawn squ ngaws na rgyax.", zh: "太陽的熱力難以接近，他們只能躲藏在山後等待。", audioFile: "115_J2_3_1" },
+                        { at: "Sawn kasa lga nyal min-ggyut mhtuw qu gwagiy Ima, memaw mtkgil knita nha gi lokah balay qu buwan na gwagiy qasa.", zh: "等太陽漸漸昇起，陽光刺眼威力依然很強。", audioFile: "115_J2_3_2" },
+                        { at: "Cyugal hi nha si nha ptnaqiy pshbyat qu bhunig nha, wayal qu slqiy ru cyux mha \"pok\" pksmu sa ktu na gwagiy, ini lawa ktwa cyux mha \"was......was.... .\" msiamu qu gwagiy lma.", zh: "拉弓射向太陽,終於射中正中心。", audioFile: "115_J2_3_3" },
+                        { at: "ktan Iga wal si in-ggyut mhuay buwan na gwagiy qasa, taqu kinmkilux uzi lga tnaq nqu squliq uzi la.", zh: "太陽的熱度逐漸轉弱。", audioFile: "115_J2_3_4" }
+                    ]},
+                    { pTitle: "第四段", sentences: [
+                        { at: "Msbzinah qu minnwah smka gwagiy qasa lga, in-gyutun nha maniq qu hnutaw nha qpuri na bway qu nyux mksrawq mkbway,", zh: "征服太陽後踏上歸途，他們一面走回家，一面採食多年前播下的果實，", audioFile: "115_J2_4_1" },
+                        { at: "ghap na Irakis uzi ga, nyux memaw mtqutux atu rngu nya zenawas la.", zh: "當年撒下的小米種子，也都長得非常茂盛結實了。", audioFile: "115_J2_4_2" },
+                        { at: "Tehuk ngasal qu minnwah smka gwagiy qasa lga,", zh: "當這些去射日的人回到家鄉時，", audioFile: "115_J2_4_3" },
+                        { at: "gigway hmawku ru tqryan kwara lhgan qasa Iru ima pqbaq lha lpi?", zh: "當年的長輩都已經駝背甚至過世了，還有誰認得他們呢？", audioFile: "115_J2_4_4" },
+                        { at: "Babaw nqu 'nwahan nha qasa lga, minblaq smbu qu qwagiy, mha ni qlyan ga mhtuw qu gwagiy, mha ni Ihngan ga mhtuw qu byacing ru ssquliq uzi lga minblaq mtzyaw ru m'abi Ima.", zh: "此後,日光適度且日夜分明,人們能在正常的時段工作、歇息。", audioFile: "115_J2_4_5" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-J3", category: "junior",
+                title: "'ringan na behuy", zhTitle: "風的起源 (第3號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "puqing 'ringan na behuy raral mga, kahul squ qutux bqanux ka wayal t'qun na Tayal ma.", zh: "風的根源是緣於鹿對族人生氣所引起。", audioFile: "115_J3_1_1" },
+                        { at: "nanu squ minnxal mga, qutux bqanux mstnaq sa Tayal Iru kyalun na Tayal mha", zh: "遠古以前，鹿和泰雅的祖先相遇，泰雅人對鹿說：", audioFile: "115_J3_1_2" },
+                        { at: "\"biqiy saku qutux knutan hi na papak su ha, ki'a pira byacing iyat saku minnaniq hi na qsinuw la\" mha tegalu sa bqanux qu Tayal ma.", zh: "「請你割下一塊耳朵的肉給我吧，我已經好幾個月沒吃過肉了。」", audioFile: "115_J3_1_3" },
+                        { at: "swa nya son qasa kmal ga, maki qu pinkyalan na Tayal ru bqanux squ kinbkesan raral ma.", zh: "這是因為雙方曾經有過的約定。", audioFile: "115_J3_1_4" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "ki'a sgalu balay na bqanux qu Tayal ru kyalun nqu bqanux qu Tayal mha \"nanu hbyat qu pucing su ru hit qutux knutan\" son nqu bqanux.", zh: "鹿答應割下一塊肉,", audioFile: "115_J3_2_1" },
+                        { at: "tuliq qu squliq qasa mga, si nya qapi kwara bzinah na papak nqu bqanux qasa mru memaw ini baqiy smu'ut qu ramu ka mshbing Ima, pucing nya lga, memaw m'bsilung qu ramu na bqanux qasa la.", zh: "但這個人毫不客氣地切下鹿的耳朵,鹿痛苦的流血。", audioFile: "115_J3_2_2" },
+                        { at: "taqu bqanux qasa hiya lga, cyux mingyaq squ bsilung qasa memaw prpus qsya qu nguhuw ru papak na bqanux ma.", zh: "鹿痛苦的浸入海中，血水染紅了一片。", audioFile: "115_J3_2_3" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "kinsuxan lga, t'aring mqalux kwara qu babaw kayal, taqu syaw na bsilung uzi ga, cyux msttora qu qsya la.", zh: "第二天,出現巨大的風,海邊昇起狂濤,", audioFile: "115_J3_3_1" },
+                        { at: "mngungu kwara qu Tayal ru kmal qutux qu bnkis mha \"llaqi, pkaki qu pinhogan na utux qaniy lki,", zh: "族人非常害怕，有位長老說：「孩子們，這一定是神明的懲罰，", audioFile: "115_J3_3_2" },
+                        { at: "taqu nyux msbah kwara qu kayal Iru qsya na bsilung qaniy la, nway ru hala ta syaw na bsilung qasa, una kya qu musa skayal nqu utux te ita\" mha.", zh: "現在天氣和海水都變了，我們去海邊看看，或許能向神明祈求原諒。」", audioFile: "115_J3_3_3" },
+                        { at: "min-ggyut mthuluy te syaw na bsilung kwara qu squliq, si kta ka memaw balay mtquzit mstora qu qsya, ini lawa ktwa lga, nyal si in- ggyut \"bux......bux\" msbehuy qu tora na qsya qasa,", zh: "人群慢慢移動到海邊，看到狂風巨浪，接著發出狂風的聲音，", audioFile: "115_J3_3_4" },
+                        { at: "si pngpongiy qu hngyang kahul squ tora na qsya mha \"Tayal! Tayal! swa simu mqnaniq iyal, biqan simu hi na papak myan ga, wal mamu si skryasi kmut qu bzinah na papak mu,", zh: "海浪發出聲音說：「泰雅人！認為族人貪得無厭、恩將仇報。", audioFile: "115_J3_3_5" },
+                        { at: "aring kira qaniy lga, pwahun maku qu yaya na behuy, phgun maku kwara qu qqhuniq, 'bayun maku kwara qu pinqmahan mamu ru pkoyay simu balay la......\"", zh: "我要用狂風吹倒樹木、毀壞農作！」", audioFile: "115_J3_3_6" },
+                        { at: "ke qasa lga, nyal balay qu behuy ka minbahuw, memaw mstkara kwara qu squliq mins'rux kya.", zh: "巨大的狂風將原先站立的人們,吹的四腳朝天,", audioFile: "115_J3_3_7" },
+                        { at: "taqu kmnut papak na bqanux ka squliq qasa mga, wayal si lleqiy na behuy ru cyux nya htagun sa qsahuy na bsilung la.", zh: "曾經貪得割下鹿耳朵的那個人則被風捲入大海中後,", audioFile: "115_J3_3_8" },
+                        { at: "ktan Iga, min-ggyut mhway hazi qu behuy qasa Ima. bsyaq bsyaq lga, mswat balay qu minbahuw na behuy la.", zh: "風雨海浪漸漸和緩下來,歸於平靜,昏暗的天色又漸漸轉睛。", audioFile: "115_J3_3_9" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-J4", category: "junior",
+                title: "squliq ka ini kngungu ghzyaq", zhTitle: "不畏懼寒冷的人 (第4號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "Raral raral hiya maki qutux ryax, trang qmisan ka ghzyaq balay. Qutux cinklgan squliq minnwah mcisal squ lpyung nha ru msbzinah musa ngasal.", zh: "族人到遠方親戚的部落探訪,準備回家。", audioFile: "115_J4_1_1" },
+                        { at: "Cinklgan nha qasa ga, mluw kya qutux baytunux na mkrakis kneril uzi ma. Ryax kasa ga krahu balay qu hlaqiy nyal si in-ggyut mbyaq,", zh: "頂著刺骨寒風白雪走在回鄉的路途中。", audioFile: "115_J4_1_2" },
+                        { at: "ki'a sazing ryax qu pinhkngyan nha lga, kmal qutux qu bnkis mha \"llaqiy! hngaw ru akita mnahu ha\", galun nya sinrhuw nya hazyung, spnahu nya qu kwara ka min-gluw qasa.", zh: "艱苦的旅程已經兩天,這時大家要休息片刻順便烤火取暖。", audioFile: "115_J4_1_3" },
+                        { at: "Maki qutux qu mrkyas na mlikuy minnluw lha, tllwan nha mha Maray Batu, ana nha tpihun mha \"Maray! uwah malah gaw, teta su lokah \" gaw, ini balay swal mwah malah,", zh: "Maray Batu 不願烤火,認為寒氣難不倒他。", audioFile: "115_J4_1_4" },
+                        { at: "cyux kmal mha \"Simu kin bnkis ru kkneril qu palah kya, ini saku nangiy ghzyaq kuzing hiya\".", zh: "他說：「你們老人和女人去烤火就好，我不怕冷」。", audioFile: "115_J4_1_5" },
+                        { at: "Hlhul qu pinnalah nha lga, mtutiq 'mubuy squ phkngyan nha la.", zh: "大夥感覺暖流上身便起身歸途,", audioFile: "115_J4_1_6" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "Ini 'rangaw gi twahiq qu tuqy ka 'sawn nha. Mayska haziy qu pinhkngyan nha lga, kmal loziy qu bnkis mha \"llqqiy! hngaw ha, aki ta mnahu loziy, swaga thyaq qu phkngyan tana\".", zh: "大概到半途,大家又再歇息一陣子,", audioFile: "115_J4_2_1" },
+                        { at: "Si bbbras hmkangiy qaraw na qhuniq ru mnahu balay, taqu maylibu malah kwara mingluw qasa Iga,", zh: "開始升火取暖,順便調節體力。", audioFile: "115_J4_2_2" },
+                        { at: "hkngyun nha qu Maray Batu, awbaq cyux ini pung ana cikuy ru cyux si \"puk......puk\" tspaku.", zh: "大家尋找 Maray Batu，他正在遠處抽菸。", audioFile: "115_J4_2_3" },
+                        { at: "Kmal qu Maray mha \"kta ru hlhu 1 simu lga, ttuliq ru cila ngasal la, baliy sawbih qu 'sawn ta\" mha.", zh: "Maray Batu 蹲坐在遠處,好像寒冷與他一點關係都沒有。", audioFile: "115_J4_2_4" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "Smsmun nha 'naras nha. mtuliq mhkangiy loziy, ktan qu hlaqiy lga, mwah tari kinkhmay ru zezihung haziy phangytn, ana yan nasa ga si kat g'nux qu lha gasa.", zh: "他們收拾好東西再次起程，雖然風雪加劇，但他們仍咬牙前進。", audioFile: "115_J4_3_1" },
+                        { at: "Ini 'rangaw mhkangiy, sown kasa lga ktan na roziq qu qalang nha la.", zh: "他們不停地走，終於肉眼能看見自己的部落了。", audioFile: "115_J4_3_2" },
+                        { at: "Kmal qutux yaki mha \"akita minsuna cikay ha, nway awbih tehuk qu ngasal ta la \" mha ru pongan nqu mingluw, mnahu ru malah loziy.", zh: "一位老婆婆說：「我們再休息一下吧，反正快到家了。」於是大家又再次升火烤火。", audioFile: "115_J4_3_3" },
+                        { at: "ktan qu Maray Batu hiya Iga, cyux si inblaq mtama sa puqinq hinhiran na qhuniq.", zh: "這時看到 Maray Batu，他正好好地坐在樹幹根部。", audioFile: "115_J4_3_4" },
+                        { at: "Ana nha kyalun mha \"ana ga uwah malah 'g-ray\" sawn nha ga, cyux si pinsuzit ru kmayal mha \"baha mamu sawn ghzyaq qu kayal ka hlhul qaniy hiya la\".", zh: "大家叫他：「你還是來烤一下火吧！」他卻噘著嘴說：「這麼溫暖的天氣，你們怎麼會說冷呢？」", audioFile: "115_J4_3_5" },
+                        { at: "Bsyaq haziy qu pinlahan nha lga, kasa qu bnkis nha \"llaqiy cila Iwah, teta ini kzenga tehk ngasal\"", zh: "烤火烤了較長一段時間後，長老說：「孩子們走吧，免得太晚才到家。」", audioFile: "115_J4_3_6" },
+                        { at: "Taqu ke' kasa lgwah, wayal mha \"wax\" suruwna tqzing qu Maray Batu,.'san nha mita lga, nyux mqanuw roziq nya ru mhuqil la.", zh: "話才剛說完，Maray Batu 突然「哇」的一聲往後倒，大家過去一看，他已經翻白眼斷氣了。", audioFile: "115_J4_3_7" },
+                        { at: "Tuliq si nha biliy t'abaw ru msbzinah musa ngasal kwara la. Nanak yaqu kneril ka mkrakis, cyux si hhyu mhutaw buq na roziy nya, swaga kinhriqun nya qu mlikuy qasa ma.", zh: "隊伍裡面的少女暗自掉淚,對Maray Batu的逝世感到惋惜。", audioFile: "115_J4_3_8" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-S1", category: "senior",
+                title: "mnaga hekyu", zhTitle: "救濟品 (第1號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "ziryax nqu mingkoku patul, mimal kawas ga, yaqih balay qnxan nqu Taywan, yaqu qenah ini tehuk qu qnxan qalang na 'Tayal.", zh: "50年代物資缺乏,原住民地區尤其不足。", audioFile: "115_S1_1_1" },
+                        { at: "tmrang squ mqzinut balay qnxan na sami ka maki rgyax ga, qsugan sami hekyu na kyokay,", zh: "在山上生活極其貧困時，我們依靠教會分發的救濟品度日。", audioFile: "115_S1_1_2" },
+                        { at: "uqu sami rema mkzyopun squ yopun na pgluw rme ru zyamba ka minkahul Amerika, ana nqu pplmukan ga memaw nha szyon mita.", zh: "大家甚至穿著印有中美合作的麵粉袋，平地人看了也覺得有趣。", audioFile: "115_S1_1_3" },
+                        { at: "mqsuqi cikay cinhkan burak nqu Tensyukyo hiya ru, teta helaw snhi Tensyukyo qalang myan mha Imnglung qu sinxu ru,", zh: "當時的部落,天主教、基督教為了讓族人很快認識,", audioFile: "115_S1_1_4" },
+                        { at: "s'usa nya mimu cingay qqeqaya na talah tunux ru, sqasuw nya sami kwara qu nniqun pplkusun ru bbengun. pqasun kwara nqu sinya.", zh: "神父將募來的救濟品,排列在教堂廣場,將衣物分發給信徒，", audioFile: "115_S1_1_5" },
+                        { at: "kwara llukus 'nwahan mimu ni sinxu ga, qtuxun nya smabu ru bkgun nya tanux na kyokay, sqasuw nya squ kwara sinya.", zh: "分裝成一包包排列在教堂外發放。", audioFile: "115_S1_1_6" },
+                        { at: "qutux ngasal ga qutux snbwan, yasa qu son myan \"hekyu\" taqu pinqsugan mayn qutux snbwan \"hekyu\" qasa ga, giwan nqu wal si txal kincinmuyaw, pinryaxun myan balay mnaga,", zh: "以一戶一包的方式領取，大家滿心期待。", audioFile: "115_S1_1_7" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "inlungan nqu innaga myan qasa ga, una na tlu ta magal sa blaq pkmilun ini ga blaq na qeqaya.", zh: "期待能拿到好衣物與好東西。", audioFile: "115_S1_2_1" },
+                        { at: "kinbaq maku nyal rasun ni lkotas qu \"hekyu\" sa minnxal ga, kya oba, lukus, gyamil ru kawa kucu, hlhul balay plkusun qmisan qu oba qasa.", zh: "阿公拿回來的有外套、鞋子，冬天穿起來很溫暖。", audioFile: "115_S1_2_2" },
+                        { at: "ghzyaq kayal ga, mutux ini Ixaniy lkotas maku. wal saku magal qutux lukus r'tung uzi,", zh: "我也分到一件漂亮的衣服，", audioFile: "115_S1_2_3" },
+                        { at: "sqisan rme plqwi qu skutaw nya, blaq balay ktan, Ingisan maku balay.", zh: "我很喜歡。", audioFile: "115_S1_2_4" },
+                        { at: "cingay balay blaq psyaqn qu qmasuw \"hekyu\", kya ruma tlu squ hminas kinkrahu na lukus ini ga yopun ga, giwan wal si kzyup yubing pagay qu qbuci.", zh: "分發救濟品常有許多趣事，有人拿到太大的衣服就像布袋一樣。", audioFile: "115_S1_2_5" },
+                        { at: "kya kruma kkneril tlu magal squ lukus ka ini hzinas skutaw kinwagiq ga, cyux nha ini baqi mha ya qenu qu te gleng ru te suruw.", zh: "有些婦女拿到太大的衣服甚至搞不清楚正反面。", audioFile: "115_S1_2_6" },
+                        { at: "kruma ga mtnaq bzih kwara qu gyamil, ana yan nasa ga, ini sami gwayaw si myan qeri mlukus, ungat qu mha yaqih pkusun, ini ga yaqih ktan hiya.", zh: "有時拿到的鞋子兩腳同一邊，但我們依然開心穿著。", audioFile: "115_S1_2_7" },
+                        { at: "lokah balay rngu nya \"hekyu\" cingay khwakun nya, ana yaqu iyat sinya ga smoya musa pqasuw \"hekyu\" uzi ru,", zh: "除了衣物,還有食物、奶粉、牛油,有許多人去教堂的目的是救濟品,", audioFile: "115_S1_2_8" },
+                        { at: "si nha lxan qu sinnhyan nha hiya, si ta usa pqsuw \"hekyu\" hru thwayaw ta lmnglung babaw nya lasa hiya la mha Imnglung.", zh: "而不是信仰。", audioFile: "115_S1_2_9" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "\"hekyu\" qasa ga iyat nanak pplkusun, kya uzi qu nniqun yan na miruku, ru qprih na kacing.", zh: "救濟品不僅是衣服，還有牛奶跟奶油，", audioFile: "115_S1_3_1" },
+                        { at: "kya qu wal magal \"hekyu\" ga mqas balay, ana ga khmay iyal qu minbah na ssquliq mwah pqasuw la.", zh: "大家拿到都很開心。", audioFile: "115_S1_3_2" },
+                        { at: "iyat nha cinkahul squ snhyan, ana mha kasa ga, wal balay krahu rnaw na \"hekyu\" mhway balay kyokay, hiya balay qu wal tehuk miq kinhlhul inlungan.", zh: "教會的救濟品給予許多人救助,不論宗教信仰,單單物資的協助,亦溫暖了許多人的心靈!", audioFile: "115_S1_3_3" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-S2", category: "senior",
+                title: "pnawngan kay' nqu zyuwaw na tlhuzyan", zhTitle: "文面的由來 (第2號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "baqun su' maha swa' tlhuzyan rqyas qu 'Tazyal? kwara' qu 'Tazyal ga, ana mlikuy, ana knayril, tayhuk qu kawas naha' Iga, 'siki tlhuzyan.", zh: "為什麼會文面?以前,不論男女,到了一定年齡就會文面,", audioFile: "115_S2_1_1" },
+                        { at: "cinlhuzyan Iga baqun mkglu ta' ru izyat ta' msquliq la. kwara' qu 'Tazyal ga baqun naha' maha yani qu spzyang krahu na zyuwaw. ini' naha' qqri mita'.", zh: "以此判定是否是同血脈或外人。", audioFile: "115_S2_1_2" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "aring sknwan ga tlhuzyan qu ita' 'Tazyal? ana qu kinbkaysan nqu ita' nanak 'Tazyal uzi ga, ini' qqutux qu pinqzyuwan uzi. sazing qu lhnyun mung maki' squ qalang na ita' 'Tazyal.", zh: "何時開始文面?常聽到的說法有兩種,", audioFile: "115_S2_2_1" },
+                        { at: "qutux qu pinqzyuwan na kinbkaysan ga, min'aring mtgyah qu babaw cinbwanan qani' ga,", zh: "長輩的一種傳說是，在天地剛開闢的時候，", audioFile: "115_S2_2_2" },
+                        { at: "mkzhtuw squ qutux btunux krahu' ka minkbka' qu sazing 'Tazyal mga, qutux qu mlikuy ru qutux qu knayril.", zh: "從裂開的巨大石頭中跳出了兩個泰雅人，一男一女。", audioFile: "115_S2_2_3" },
+                        { at: "nanak laha' sazing hi' qu maki' squ babaw rhzyal. ungat qu glu naha'.", zh: "世上只有他們兩個人，沒有其他的同伴。", audioFile: "115_S2_2_4" },
+                        { at: "bsyaq qu pin_glgan naha' Iga, Imnglung qu knayril kasa maha, swa' mawsa' mqilang qu qnxan ta' sazing hi' balay qu maki squ babaw cinbwanan qani'.", zh: "日子久了，那女人心想：這世上只有我們兩個，這樣生活實在太孤單了。", audioFile: "115_S2_2_5" },
+                        { at: "aki' yaqu 'si ta' psqun squ mlikuy qani', ru aki' kya qu kinbahan ta'. maha qu inlungan nya'.", zh: "兩人繁衍後代之後開始文面。", audioFile: "115_S2_2_6" },
+                        { at: "ru kyalun nya' qu mlikuy kasa maha, \"gbyan kira' ga, kya qutux qu baytunux na mkrakis pkaki squ lxyux ka mkrazya' nqu nyux ta' ki'an qani. hali mita' nn gawn su' nya'.", zh: "她對男人說，傍晚有個美麗的少女會在洞穴那裡，你去看看吧，", audioFile: "115_S2_2_7" },
+                        { at: "kta ru maha ni qsliq su ga yasa 'si gali bays la. aki mbhuzyaw qu kinbahan mamu.\"", zh: "可以與她結為伴侶繁衍後代。", audioFile: "115_S2_2_8" },
+                        { at: "aw' baq sa knayril kasa nanak qu wal mnaga' kya squ lxyux kasa. ga,", zh: "其實在山洞裡等待的，就是那個女人自己。", audioFile: "115_S2_2_9" },
+                        { at: "Imnglung maha 'siki sbahun ta qu rqyas ta' gi bbaqun ta' nqu mlikuy kasa Iru izyat pswazyal la maha, ru ptasan nya' na g'iluh na bagah qu rqyas nya' la.", zh: "她心想必須改變容貌，免得被男人認出來而不答應，於是她用黑炭塗滿了臉龐。", audioFile: "115_S2_2_10" },
+                        { at: "nanu' mwah qu mlikuy kasa lga qsliq nya' balay qu mkrakis kasa ru wal 'si in_ghyay msqun ru mbhuzyaw qu kinbahan naha' la. aring kya lga tlhuzyan uzi qu kinbahan naha' la.", zh: "男人來了很喜歡，於是結為伴侶繁衍後代。從那時起他們的後代也都開始紋面。", audioFile: "115_S2_2_11" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "qutux qu pinqzyuwan ga, yalaw gi lawkah mtciriq qu ini ptnaq na qalang ru mgaga' uzi sraral. pzyux qu wal ps'qun kmut squ glu naha' nanak.", zh: "還有一種傳說,當時部落與部落很多爭戰,誤殺事件層出不窮。", audioFile: "115_S2_3_1" },
+                        { at: "nanu' yasa qu msli mkal kwara' qu mrhuw na 'Tazyal maha,", zh: "因此，泰雅族的領袖們聚集商議說：", audioFile: "115_S2_3_2" },
+                        { at: "\"yani ta' 'si giway ps'uqu' kmut squ glu ta' nanak lga, 'si baqi sa psmasuq ta' kwara' babaw nya' ru izyat ta' psthay ana qutux la.\" maha mkal,", zh: "「如果我們總是誤殺自己人，以後我們都會滅絕，一個都不留。」", audioFile: "115_S2_3_3" },
+                        { at: "ru mssi' kay' maha, \"ita kwara' qu qutux ramu' ka sawn 'Tazyal ga, aring kira' lga, ptasay ta' qu lihuy ru rqyas ta'. kana ta' ps'uqu' mkkut.\"", zh: "「凡是同一血脈的泰雅族人都要在臉上、額頭上標記,才不會誤殺。」", audioFile: "115_S2_3_4" },
+                        { at: "aring kya lga, tlhuzyan kwara' qu 'Tazyal la. mlikuy ga, tlhuzyan squ lihuy ru qabay. knayril ga, tlhuzyan squ lihuy ru rqyas.", zh: "從那時起,泰雅族人都會文面。男人文在額頭及下巴,女人文在額頭及臉頰。", audioFile: "115_S2_3_5" },
+                        { at: "nanu' yaqu sazing ka wal spinqzyu' qani' qu pinnawngan ka snbil kay' na kinbkaysan na ita' 'Tazyal qu 'ringan na tlhuzyan rqyas na 'Tazyal.", zh: "這就是兩種流傳下來關於泰雅族人文面的起源傳說。", audioFile: "115_S2_3_6" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-S3", category: "senior",
+                title: "ke' kinhmgan na pagay 'Tayal", zhTitle: "旱稻的故事 (第3號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "nanu squ raral mga, m'uy balay qqyanux na 'tayal ma. si giway musa Imamu' bway na qhuniq, ini ga musa kmyut yahuw, wasiq yasa qu sramat nha.", zh: "以前只能採嫩葉、野菜當食物。", audioFile: "115_S3_1_1" },
+                        { at: "nanu yasa qu ini ktngi' maniq krryax, m'uy balay qinnxan nha. si ga qnzyat musa hmkangi qsinuw ga yasa stngi' nha maniq.", zh: "除非去狩獵才能吃飽。", audioFile: "115_S3_1_2" },
+                        { at: "nanu yasa qu ptlu' squ mtkzyay ini qwalax bsyaq lga, ini uluw niqun ru", zh: "遇到長久不下雨的乾旱時，就會找不到食物，", audioFile: "115_S3_1_3" },
+                        { at: "nanu yasa qu 'san nha tbalung hmkangi hmnghung kmzyap kwara minqyanux nqu qulih llyung, kagang, kbolung yasa qu niqun nha la.", zh: "所以他們會去溪邊翻石頭，尋找魚、螃蟹、蝦子來當作食物。", audioFile: "115_S3_1_4" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "nanu squ minxal, pongan nha hngzyang kahul squ namuw, \"gas gas\" muci ini rangaw. nanu yasa qu 'san nha mita mga, aw baq qoli maki kya.", zh: "有次,屋頂傳來「卡斯!卡斯!」聲。原來是老鼠,", audioFile: "115_S3_2_1" },
+                        { at: "ana nha ssagun ga aki wayal ru mwah lozi ma. aki wayal ha, ru mwah lozi, yasa si nya laxi kya la. bsyaq hazi babaw nya llungun nha ru 'san nha mita mga, nyux mbhuyaw cingay hỉ' nha Ima.", zh: "趕也趕不走，後來繁殖很多小老鼠。", audioFile: "115_S3_2_2" },
+                        { at: "nanu yasa qu mpkayal qu qutux ngasal muci \"laxi ta ssawi la, siqan, nyux twaya maki sqani la\" muci mru si nha laxi kya ma.", zh: "家人說,不要把牠們趕出去,", audioFile: "115_S3_2_3" },
+                        { at: "nanu yasa ini kbsyaq lga, yasa qoli kwara qu qsahuy na ngasal ru lingay na ngasal Ima. ana yasa ga si nha laxi kya uzi.", zh: "不久整個房子四周都是老鼠。", audioFile: "115_S3_2_4" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "nanu squ minxal, si kta wal si kongat qu qoli minaki kya ru si qlqala' kwara nha ma, ru hkngyun nha lingay na ngasal ga ini nha 'lwi.", zh: "有次,在家的老鼠都看不見,到處尋找也找不到。", audioFile: "115_S3_3_1" },
+                        { at: "'san nha hmkangi zik na sakaw \"kuna nyux mwah mshzi maki zik na sakaw\" muci ru hkngyun nha kya ma. ktan nha mga, ungat qu qoli hiya, ga ktan nha qutux k'man ka iyat nha kntan krryax ma.", zh: "卻在床底下發現一根不曾看過的草。", audioFile: "115_S3_3_2" },
+                        { at: "nanu yasa qu galun nha ru inblequn nha mita ga cingay balay bway nya nyux si tqopu ru nyux ki'an ngurus uzi ma. aw baq naras na qoli ru sni' nya kya ma.", zh: "上面長滿種子，原來是老鼠搬來藏在那裡的。", audioFile: "115_S3_3_3" },
+                        { at: "tlaman nha kmtu' ga sbing balay ma. \"tlamay ta gmhap wah!\" muci mru sghap nha tanux, ktan mga nyal hbku' kwara lru ki'a tehuk qu ryax nya lga tnaral lru mkhpah ru mkbway Ima.", zh: "他們在室外播下,結果,所有的種子都長起來,含苞、開花、結果,", audioFile: "115_S3_3_4" },
+                        { at: "nanu yasa qu puyun nha ru niqun nha mga sokan balay ru blaq balay niqun ma. aring kya maki qu pagay na 'Tayal, gaga' bnkis 'Tayal sraral ini nha qpuhi maniq qu pagay zik khu' uzi.", zh: "煮來吃,吃起來又香、又好吃,從那時起就有了稻子。", audioFile: "115_S3_3_5" },
+                        { at: "qoli qani qu sthay nha cikay hmswa' ga giwan nqu lpyung ta qu qoli qani ma.", zh: "老鼠被視為帶來稻子的朋友，所以不會吃光穀倉的稻子。", audioFile: "115_S3_3_6" }
+                    ]}
+                ]
+            },
+            {
+                id: "article-S4", category: "senior",
+                title: "'ringan muluw puniq na 'Tayal", zhTitle: "泰雅人取火的故事 (第4號)",
+                paragraphs: [
+                    { pTitle: "第一段", sentences: [
+                        { at: "nanu squ mrhuw raral, aring mhtuw kahul squ Pinsbkan mga, ini nha baqi mnahu' puniq, si mgiway mamu' squ bway qhuniq ru k'man. qsinuw uzi ga si nya pqtaqi maniq.", zh: "從前的祖先不懂生火,只吃樹果、野草,生吃山肉。", audioFile: "115_S4_1_1" },
+                        { at: "qutux ryax, msbehuy qu kayal. ktan nha mga mtlom qu hlahuy lma.", zh: "有一天，颳起大風，他們看見森林燒了起來。", audioFile: "115_S4_1_2" },
+                        { at: "san nha mita babaw msbehuy, cingay balay qsinuw nyux mhuqil wal tqluxun na puniq ma. tlaman nha maniq mga blaq balay niqun ma.", zh: "風停後過去查看，有許多野獸被火燒死，試吃看看發現非常美味。", audioFile: "115_S4_1_3" },
+                        { at: "nanu yasa qu aring nya hga rasun nha ngasal qu qhuniq nyux msuling ru qyatan nha ru yasa qu ssuling nha qsinuw ma.", zh: "就將燃著火的木頭帶回家之後,就發現生火的方法。", audioFile: "115_S4_1_4" },
+                        { at: "babaw nya maki qutux 'tayal mnita squ trang mcyana puniq qasa mha \"trang mcyana puniq qasa ga kahul kayal mwah mhutaw puniq qasa\" muci mga,", zh: "有人看到火是如何燃起的，", audioFile: "115_S4_1_5" },
+                        { at: "\"qara na parung qu sgrgul na znwi' behuy ru yasa si pgrgul kya nanak Iru mshiluq n'aring nya ru si kita mcyana la\" muci qu ke' nha ma.", zh: "是因為風吹樹枝互相摩擦生熱而起火。", audioFile: "115_S4_1_6" },
+                        { at: "nanu yasa qu baqun nha kya son nanu mutung la, cyugal tuqi nya qu aring mutung puniq.", zh: "於是他們學會了三種取火的方式。", audioFile: "115_S4_1_7" }
+                    ]},
+                    { pTitle: "第二段", sentences: [
+                        { at: "te qutux nya hiya ga qhuniq ru qhuniq sgrgul nha, staq nha qutux qhuniq yan na tluling kinqthuy nya.", zh: "一種是木柴磨擦生火。", audioFile: "115_S4_2_1" },
+                        { at: "ru sbnxun qu llyuw nya ru sbka' ta qutux qhuniq inblequn ta tmaq, pzitan qutux bling tnaq shop na qhuniq tnaq qasa ru pzitan la.", zh: "將木柴削尖，再將另一塊木頭挖洞，插入摩擦。", audioFile: "115_S4_2_2" },
+                        { at: "bsyaq hazi lga shiluq lru qzyun ta putung hru sqyu' ta squ ruma' lga mcyana la.", zh: "摩擦久了發熱，加上引火絨就能生火。", audioFile: "115_S4_2_3" },
+                        { at: "qutux nya ga qyacing ru qyacing tungan nha, babaw nya yan misuw qani lga baliq ru tunux putung qu sputung nha.", zh: "另一種是鵝卵石與敲打、磨擦,現在則是用鐵和瑪瑙石。", audioFile: "115_S4_2_4" }
+                    ]},
+                    { pTitle: "第三段", sentences: [
+                        { at: "nanu yasa qu aring squ kinbkisan raral, ini nha balay shmci qu puniq ay. inblequn nha balay qmayat, ini ga musa qmayah ga sbilan nha tqbuli ru musa.", zh: "先祖尊重火、養火。去山上會用煙灰覆蓋火苗再出門,", audioFile: "115_S4_3_1" },
+                        { at: "mwah ngasal gbyan Iga, yasa kya puniq nya hiya na'. bsyaq hazi pgyaran ta ngasal Iga nyux m'uyut qu puniq la muci lga, musa msina' puniq na qalang la.", zh: "出遠門會熄滅火,回來會到其他家取火種。", audioFile: "115_S4_3_2" },
+                        { at: "tmubux ta trakis ru pagay ga si ga pinnyangun ta quzi, ini ga guqi ru lomun ta. tmrang qmisan hzyaq Iga plahan ta puniq uzi.", zh: "要砍伐原始林或耕地會用火燒地;寒冷會用火取暖。", audioFile: "115_S4_3_3" },
+                        { at: "nanu yasa qu utux nha balay qu puniq qani. ke' na nbkis hiya ga qbuli na hka' qani qu sincibaq nya squ insuna' nqu ita 'Tayal.", zh: "所以他們把火視為神明。老人說，爐灶的煙灰代表著泰雅族生命的延續。", audioFile: "115_S4_3_4" },
+                        { at: "iyat puniq ga baha maki qu qbuli uzi Irwa? iyat ta laxan qu qutux ke' qani ay!", zh: "如果沒有火，怎麼會有煙灰呢？這句訓勉的話我們千萬不能忘記啊！", audioFile: "115_S4_3_5" }
+                    ]}
+                ]
+            }
+        ];
+
+        let globalPlaybackSpeed = 1.0;
+        let activeCategory = null;
+        window.currentArticleId = "";
+        window.currentArticleTitle = "";
+        let currentSuggestionType = "";
+
+        function syncSpeed(value) {
+            globalPlaybackSpeed = parseFloat(value);
+            const player = document.getElementById('audio-player');
+            if (player) player.playbackRate = globalPlaybackSpeed;
+            document.querySelectorAll('.speed-sync').forEach(sel => { sel.value = value; });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function wrapWordsForHighlight(text) {
+            const words = text.split(/(\s+)/); 
+            return words.map(part => {
+                if (part.trim().length === 0) return part;
+                const cleanWord = part.replace(/[^a-zA-Z']/g, '').toLowerCase().replace(/'/g, '_');
+                return `<span class="word-highlight cursor-pointer" onclick="playSingleWord('${cleanWord}')">${part}</span>`;
+            }).join('');
+        }
+        
+        function playSingleWord(word) {
+            const player = document.getElementById('audio-player');
+            player.src = `audio/${word}.mp3`;
+            player.playbackRate = globalPlaybackSpeed;
+            player.play().catch(e => { showToast(`找不到單字音檔，請點擊「播放原音」聽整句`); });
+        }
+
+        function showHome() {
+            const player = document.getElementById('audio-player');
+            player.pause();
+            player.onended = null;
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('home-view').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showCategory(level) {
+            activeCategory = level;
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('category-list-view').classList.add('active');
+            window.scrollTo(0, 0);
+
+            const container = document.getElementById('article-list-container');
+            const titleElem = document.getElementById('cat-title');
+            const iconContainer = document.getElementById('cat-icon-container');
+            container.innerHTML = '';
+            
+            const svgs = {
+                'elem': `<svg viewBox="0 0 100 100" class="w-8 h-8"><circle cx="32" cy="55" r="22" fill="#fcd34d"/><path d="M 12 40 Q 32 30 52 40" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="25" cy="52" r="2.5" fill="#1f2937"/><circle cx="39" cy="52" r="2.5" fill="#1f2937"/><path d="M 26 62 Q 32 68 38 62" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="68" cy="55" r="22" fill="#fef08a"/><path d="M 48 40 Q 68 30 88 40" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="61" cy="52" r="2.5" fill="#1f2937"/><circle cx="75" cy="52" r="2.5" fill="#1f2937"/><path d="M 62 62 Q 68 68 74 62" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+                'junior': `<svg viewBox="0 0 100 100" class="w-8 h-8"><circle cx="30" cy="55" r="24" fill="#fcd34d"/><path d="M 8 38 Q 30 28 52 38" stroke="#1f2937" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="22" cy="51" r="2.5" fill="#1f2937"/><circle cx="38" cy="51" r="2.5" fill="#1f2937"/><path d="M 24 63 Q 30 67 36 63" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="70" cy="55" r="24" fill="#fef08a"/><path d="M 48 38 Q 70 28 92 38" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="62" cy="51" r="2.5" fill="#1f2937"/><circle cx="78" cy="51" r="2.5" fill="#1f2937"/><path d="M 64 63 Q 70 67 76 63" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+                'senior': `<svg viewBox="0 0 100 100" class="w-8 h-8"><circle cx="30" cy="55" r="24" fill="#fcd34d"/><path d="M 28 35 L 28 43 M 30 34 L 30 44 M 32 35 L 32 43" stroke="#0f172a" stroke-width="1.5" opacity="0.5"/><path d="M 8 38 Q 30 28 52 38" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="22" cy="51" r="2.5" fill="#1f2937"/><circle cx="38" cy="51" r="2.5" fill="#1f2937"/><path d="M 24 62 Q 30 66 36 62" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 28 69 L 28 78 M 30 70 L 30 79 M 32 69 L 32 78" stroke="#0f172a" stroke-width="1.5" opacity="0.5"/><circle cx="70" cy="55" r="24" fill="#fef08a"/><path d="M 68 35 L 68 43 M 70 34 L 70 44 M 72 35 L 72 43" stroke="#0f172a" stroke-width="1.5" opacity="0.5"/><path d="M 48 38 Q 70 28 92 38" stroke="#b91c1c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="62" cy="51" r="2.5" fill="#1f2937"/><circle cx="78" cy="51" r="2.5" fill="#1f2937"/><path d="M 64 63 Q 70 67 76 63" stroke="#1f2937" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 48 56 Q 60 72 70 64 Q 80 72 92 56" stroke="#0f172a" stroke-width="3" fill="none" opacity="0.3"/></svg>`
+            };
+
+            const colors = { 'elem': 'emerald', 'junior': 'blue', 'senior': 'purple' };
+            const titles = { 'elem': '國小部落', 'junior': '國中部落', 'senior': '高中部落' };
+            
+            iconContainer.className = 'w-12 h-12 rounded-full flex items-center justify-center text-white shadow-md border-2 border-white pointer-events-auto transition-colors';
+            titleElem.innerText = titles[level];
+            iconContainer.innerHTML = svgs[level];
+            iconContainer.classList.add(`bg-${colors[level]}-500`);
+
+            let count = 0;
+            allArticles.forEach((article, index) => {
+                if (article.category !== level) return;
+                count++;
+                
+                const card = document.createElement('div');
+                const isReady = true; // 預設全部顯示已上架
+                card.className = `article-card border-2 hover:border-${colors[level]}-500 group`;
+                card.onclick = () => openArticle(index);
+                
+                const statusBadge = `<span class="bg-${colors[level]}-100 text-${colors[level]}-700 px-2 py-1 rounded text-xs font-bold shadow-sm border border-${colors[level]}-200 flex items-center gap-1"><i class="fas fa-check-circle"></i> 文章已上架</span>`;
+                const arrowColor = `group-hover:text-${colors[level]}-600 group-hover:bg-${colors[level]}-100`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between mb-3 gap-2">
+                            <div class="text-xs font-bold text-gray-500 uppercase tracking-wider bg-gray-100 inline-block px-2 py-1 rounded shadow-sm border border-gray-200 shrink-0">第 ${count} 號文章</div>
+                            ${statusBadge}
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 font-serif italic mb-2 group-hover:text-gray-700 transition-colors">${article.title}</h3>
+                        <p class="text-gray-600 font-medium">${article.zhTitle}</p>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center transition-colors shadow-sm ${arrowColor}">
+                            <i class="fas fa-chevron-right text-gray-400 transition-transform group-hover:translate-x-1"></i>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function backToCategory() {
+            const player = document.getElementById('audio-player');
+            player.pause();
+            player.onended = null;
+            if(activeCategory) { showCategory(activeCategory); } else { showHome(); }
+        }
+
+        function playFile(filename, containerId, isEven = false) {
+            const player = document.getElementById('audio-player');
+            player.pause();
+            
+            const txtColor = isEven ? 'text-rose-700' : 'text-emerald-700';
+            const bgColor = isEven ? 'bg-rose-200' : 'bg-emerald-200';
+            const allWordColors = ['text-emerald-700', 'bg-emerald-200', 'text-rose-700', 'bg-rose-200', 'rounded-md', 'scale-110', 'inline-block', 'font-black'];
+
+            document.querySelectorAll('.word-highlight').forEach(el => el.classList.remove(...allWordColors));
+
+            player.ontimeupdate = () => {
+                if (!player.duration) return;
+                const progress = player.currentTime / player.duration; 
+                const container = document.getElementById(containerId);
+                if (container) {
+                    const words = container.querySelectorAll('.word-highlight');
+                    if (words.length > 0) {
+                        const targetIndex = Math.min(Math.floor(progress * words.length), words.length - 1);
+                        words.forEach((el, idx) => {
+                            if (idx === targetIndex) el.classList.add(txtColor, bgColor, 'rounded-md', 'scale-110', 'inline-block', 'font-black');
+                            else el.classList.remove(...allWordColors);
+                        });
+                    }
+                }
+            };
+            player.onended = () => {
+                document.querySelectorAll('.word-highlight').forEach(el => el.classList.remove(...allWordColors));
+                player.ontimeupdate = null;
+            }; 
+            player.src = filename;
+            player.playbackRate = globalPlaybackSpeed;
+            player.play().catch(e => { showToast(`找不到錄音檔: ${filename}`); });
+        }
+
+        function toggleZh(pIdx, sIdx) {
+            document.getElementById(`zh-${pIdx}-${sIdx}`).classList.toggle('hidden-zh');
+        }
+
+        let modalState = { active: false, queue: [], currentIndex: 0 };
+        function playParagraph(aIdx, pIdx) {
+            const article = allArticles[aIdx];
+            const para = article.paragraphs[pIdx];
+            
+            document.getElementById('modal-title').innerText = para.pTitle + " 朗讀連播";
+            const content = document.getElementById('modal-content');
+            content.innerHTML = '';
+            modalState.queue = [];
+            
+            para.sentences.forEach((sent, sIdx) => {
+                const isEven = (sIdx + 1) % 2 === 0;
+                modalState.queue.push(sent.audioFile + (isEven ? '_F.mp3' : '_M.mp3'));
+                
+                const row = document.createElement('div');
+                row.id = `modal-sent-row-${sIdx}`;
+                row.className = 'p-5 border-l-4 border-transparent transition-all duration-300 rounded-r-2xl mb-2';
+                row.innerHTML = `<div class="atayal-text font-bold text-gray-800 mb-2">${wrapWordsForHighlight(sent.at)}</div><div class="chinese-text text-gray-500">${sent.zh}</div>`;
+                content.appendChild(row);
+            });
+            
+            document.getElementById('para-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+            modalState.active = true;
+            modalState.currentIndex = 0;
+            playNextInQueue();
+        }
+
+        function playNextInQueue() {
+            if (!modalState.active) return;
+            const player = document.getElementById('audio-player');
+            
+            if (modalState.currentIndex >= modalState.queue.length) {
+                document.getElementById('modal-play-btn').innerHTML = '<i class="fas fa-redo"></i> 重新播放';
+                document.getElementById('modal-play-btn').classList.replace('bg-emerald-600', 'bg-blue-600');
+                document.getElementById('modal-play-btn').classList.replace('hover:bg-emerald-700', 'hover:bg-blue-700');
+                return;
+            }
+            
+            const isEven = (modalState.currentIndex + 1) % 2 === 0;
+            const activeRow = document.getElementById(`modal-sent-row-${modalState.currentIndex}`);
+            document.querySelectorAll('[id^="modal-sent-row-"]').forEach(el => {
+                el.classList.remove('bg-emerald-100', 'border-emerald-500', 'bg-rose-100', 'border-rose-500', 'shadow-md');
+                el.classList.add('border-transparent');
+            });
+            
+            if(activeRow) {
+                activeRow.classList.remove('border-transparent');
+                activeRow.classList.add(isEven ? 'bg-rose-100' : 'bg-emerald-100', isEven ? 'border-rose-500' : 'border-emerald-500', 'shadow-md');
+                activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            player.src = modalState.queue[modalState.currentIndex];
+            player.playbackRate = globalPlaybackSpeed;
+            player.onended = () => {
+                player.ontimeupdate = null;
+                modalState.currentIndex++;
+                playNextInQueue();
+            };
+            
+            document.getElementById('modal-play-btn').innerHTML = '<i class="fas fa-pause"></i> 暫停播放';
+            document.getElementById('modal-play-btn').classList.replace('bg-blue-600', 'bg-emerald-600');
+            document.getElementById('modal-play-btn').classList.replace('hover:bg-blue-700', 'hover:bg-emerald-700');
+            
+            player.play().catch(e => {
+                showToast(`跳過缺失音檔...`);
+                setTimeout(() => { modalState.currentIndex++; playNextInQueue(); }, 1500);
+            });
+        }
+        
+        function toggleModalPlay() {
+            const player = document.getElementById('audio-player');
+            if (modalState.currentIndex >= modalState.queue.length) {
+                modalState.currentIndex = 0; playNextInQueue(); return;
+            }
+            if (player.paused) {
+                player.play(); document.getElementById('modal-play-btn').innerHTML = '<i class="fas fa-pause"></i> 暫停播放';
+            } else {
+                player.pause(); document.getElementById('modal-play-btn').innerHTML = '<i class="fas fa-play"></i> 繼續播放';
+            }
+        }
+        
+        function closeParagraphModal() {
+            modalState.active = false;
+            document.getElementById('audio-player').pause();
+            document.getElementById('para-modal').classList.add('hidden');
+            document.body.style.overflow = ''; 
+        }
+
+        const sugConfig = {
+            'word': { icon: 'fas fa-spell-check', title: '單詞修正建議', color: 'bg-blue-600', hover: 'hover:bg-blue-700', ring: 'focus:ring-blue-500', textBtn: 'text-blue-600', orig: '錯誤單詞', sug: '建議修正單詞' },
+            'sentence': { icon: 'fas fa-align-left', title: '句子修正建議', color: 'bg-amber-500', hover: 'hover:bg-amber-600', ring: 'focus:ring-amber-500', textBtn: 'text-amber-600', orig: '錯誤句子', sug: '建議修正句子' },
+            'audio': { icon: 'fas fa-microphone-alt', title: '讀音修正建議', color: 'bg-rose-500', hover: 'hover:bg-rose-600', ring: 'focus:ring-rose-500', textBtn: 'text-rose-600', orig: '發生讀音錯誤的字句', sug: '正確發音描述' }
+        };
+
+        function openSuggestionModal(type) {
+            currentSuggestionType = type;
+            const config = sugConfig[type];
+            document.getElementById('suggestion-title').innerHTML = `<i class="${config.icon}"></i> ${config.title} <span class="text-sm font-normal ml-2 opacity-80">(${window.currentArticleTitle})</span>`;
+            document.getElementById('suggestion-header').className = `px-6 py-4 flex justify-between items-center shadow-md z-10 text-white ${config.color}`;
+            document.getElementById('submit-sug-btn').className = `px-6 py-2.5 text-white rounded-lg transition-colors font-bold shadow-md flex items-center gap-2 ${config.color} ${config.hover}`;
+            
+            document.getElementById('sug-name').value = ''; document.getElementById('sug-email').value = '';
+            document.getElementById('suggestion-error').classList.add('hidden');
+            document.getElementById('suggestion-items-container').innerHTML = '';
+            addSuggestionItem(); 
+            
+            document.getElementById('suggestion-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSuggestionModal() {
+            document.getElementById('suggestion-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function addSuggestionItem() {
+            const config = sugConfig[currentSuggestionType];
+            const container = document.getElementById('suggestion-items-container');
+            const index = container.children.length + 1;
+            
+            let suggestInputHtml = currentSuggestionType === 'audio' ? `
+                <label class="block text-sm font-bold text-gray-700 mb-1">上傳正確發音音檔 (將轉為 MP3)</label>
+                <div class="relative flex items-center border border-gray-300 rounded-lg p-1 bg-white focus-within:ring-2 ${config.ring}">
+                    <input type="file" accept="audio/*" onchange="handleAudioUpload(this)" class="sug-file w-full text-sm text-gray-500 file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-100 hover:file:bg-gray-200 cursor-pointer focus:outline-none">
+                    <span class="upload-status absolute right-3 text-sm font-bold bg-white px-2 pointer-events-none"></span>
+                </div>` : `
+                <label class="block text-sm font-bold text-gray-700 mb-1">${config.sug}</label>
+                <input type="text" class="sug-sug w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 ${config.ring} focus:outline-none" placeholder="輸入建議內容">`;
+
+            container.insertAdjacentHTML('beforeend', `
+                <div class="sug-item bg-white p-5 rounded-xl shadow-sm border border-gray-200 relative">
+                    <div class="absolute top-2 right-2"><button onclick="if(document.querySelectorAll('.sug-item').length>1) this.closest('.sug-item').remove()" class="text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></div>
+                    <h4 class="font-bold text-gray-700 mb-3 border-b pb-2 flex items-center gap-2"><i class="fas fa-edit ${config.textBtn}"></i> 修正項目 ${index}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div><label class="block text-sm font-bold text-gray-700 mb-1">${config.orig}</label><input type="text" class="sug-orig w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 ${config.ring} focus:outline-none" placeholder="輸入原內容"></div>
+                        <div>${suggestInputHtml}</div>
+                    </div>
+                    <div><label class="block text-sm font-bold text-gray-700 mb-1">原因說明</label><textarea class="sug-reason w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 ${config.ring} focus:outline-none" rows="2" placeholder="請簡單說明..."></textarea></div>
+                </div>`);
+        }
+
+        window.handleAudioUpload = async function(inputElement) {
+            if (typeof lamejs === 'undefined') {
+                inputElement.nextElementSibling.innerHTML = '<i class="fas fa-times-circle text-red-500"></i> MP3套件未載入'; return;
+            }
+            const file = inputElement.files[0];
+            if (!file) return;
+            
+            const statusEl = inputElement.nextElementSibling;
+            statusEl.innerHTML = '<i class="fas fa-spinner fa-spin text-amber-500"></i> 轉換中...';
+            inputElement.disabled = true;
+
+            try {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const decodedData = await audioCtx.decodeAudioData(e.target.result);
+                        const offlineCtx = new OfflineAudioContext(1, decodedData.length, decodedData.sampleRate);
+                        const source = offlineCtx.createBufferSource();
+                        source.buffer = decodedData;
+                        source.connect(offlineCtx.destination);
+                        source.start();
+                        const rendered = await offlineCtx.startRendering();
+                        
+                        const channelData = rendered.getChannelData(0);
+                        const samples = new Int16Array(channelData.length);
+                        for (let i = 0; i < channelData.length; i++) {
+                            let s = Math.max(-1, Math.min(1, channelData[i]));
+                            samples[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+                        }
+                        
+                        const mp3encoder = new lamejs.Mp3Encoder(1, rendered.sampleRate, 128); 
+                        const mp3Data = [];
+                        for (let i = 0; i < samples.length; i += 1152) {
+                            const chunk = samples.subarray(i, i + 1152);
+                            const encoded = mp3encoder.encodeBuffer(chunk);
+                            if (encoded.length > 0) mp3Data.push(encoded);
+                        }
+                        const finalBuffer = mp3encoder.flush();
+                        if (finalBuffer.length > 0) mp3Data.push(finalBuffer);
+                        
+                        const blob = new Blob(mp3Data, { type: 'audio/mp3' });
+                        const readerBase64 = new FileReader();
+                        readerBase64.readAsDataURL(blob); 
+                        readerBase64.onloadend = function() {
+                            inputElement.base64Data = readerBase64.result;
+                            statusEl.innerHTML = '<i class="fas fa-check-circle text-emerald-500"></i> 完成';
+                            inputElement.disabled = false;
+                        }
+                    } catch(err) {
+                        statusEl.innerHTML = '<i class="fas fa-times-circle text-red-500"></i> 失敗';
+                        inputElement.disabled = false;
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            } catch(err) {
+                statusEl.innerHTML = '<i class="fas fa-times-circle text-red-500"></i> 錯誤';
+                inputElement.disabled = false;
+            }
+        };
+
+        async function submitSuggestion() {
+            const name = document.getElementById('sug-name').value.trim();
+            const email = document.getElementById('sug-email').value.trim();
+            const errorEl = document.getElementById('suggestion-error');
+            
+            if (!name || !email) {
+                errorEl.innerText = "請完整填寫姓名與 Email。";
+                errorEl.classList.remove('hidden'); return;
+            }
+
+            let isValid = true;
+            document.querySelectorAll('.sug-item').forEach(el => {
+                const orig = el.querySelector('.sug-orig').value.trim();
+                const reason = el.querySelector('.sug-reason').value.trim();
+                let sug = currentSuggestionType === 'audio' ? (el.querySelector('.sug-file').base64Data || "") : el.querySelector('.sug-sug').value.trim();
+                
+                if (orig || sug || reason) {
+                    if (!orig || !sug) isValid = false;
+                    if(isValid && window.submitSuggestionToFirebase) {
+                        window.submitSuggestionToFirebase({
+                            type: currentSuggestionType, articleTitle: window.currentArticleTitle,
+                            name: name, email: email, originalText: orig, reason: reason,
+                            suggestedText: currentSuggestionType === 'audio' ? '附帶錄音檔' : sug,
+                            audioBase64: currentSuggestionType === 'audio' ? sug : null,
+                            timestamp: new Date()
+                        });
+                    }
+                }
+            });
+
+            if (!isValid) {
+                errorEl.innerText = "請填寫完整的修正內容 (原內容與建議皆必填)。";
+                errorEl.classList.remove('hidden'); return;
+            }
+
+            errorEl.classList.add('hidden');
+            const btn = document.getElementById('submit-sug-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 傳送中...';
+            
+            setTimeout(() => {
+                showToast('感謝建議！已成功送出。');
+                closeSuggestionModal();
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> 傳送建議';
+            }, 1000);
+        }
+
+        function openArticle(index) {
+            const article = allArticles[index];
+            window.currentArticleId = article.id; window.currentArticleTitle = article.title;
+            globalPlaybackSpeed = 1.0;
+            const player = document.getElementById('audio-player');
+            if (player) player.playbackRate = globalPlaybackSpeed;
+            
+            document.getElementById('current-article-title').innerText = article.title;
+            document.getElementById('current-article-zh').innerText = article.zhTitle;
+            
+            const contentDiv = document.getElementById('article-content');
+            contentDiv.innerHTML = '';
+
+            article.paragraphs.forEach((para, pIdx) => {
+                const pTitleContainer = document.createElement('div');
+                pTitleContainer.className = 'flex flex-wrap items-center justify-between mt-10 mb-4 pb-2 border-b-2 border-emerald-200 gap-4';
+                pTitleContainer.innerHTML = `
+                    <div class="text-xl md:text-2xl font-black text-emerald-900 bg-white/95 backdrop-blur-md px-5 py-2 rounded-xl shadow-md border border-emerald-100 drop-shadow-sm">${para.pTitle}</div>
+                    <button onclick="playParagraph(${index}, ${pIdx})" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 md:px-5 py-2 rounded-full text-sm font-bold shadow-md hover:scale-105 transition-all"><i class="fas fa-play-circle"></i> 段落連播</button>
+                `;
+                contentDiv.appendChild(pTitleContainer);
+
+                para.sentences.forEach((item, sIdx) => {
+                    const card = document.createElement('div');
+                    card.className = 'sentence-card p-5 rounded-xl shadow-sm border border-white/50 mb-4';
+                    
+                    const isEven = (sIdx + 1) % 2 === 0;
+                    const finalAudioFile = item.audioFile + (isEven ? '_F.mp3' : '_M.mp3');
+                    const voiceBtnClass = isEven ? 'bg-rose-500 hover:bg-rose-600' : 'bg-emerald-600 hover:bg-emerald-700';
+                    const numClass = isEven ? 'from-rose-100 to-rose-200 text-rose-900 border-rose-400' : 'from-emerald-100 to-emerald-200 text-emerald-900 border-emerald-400';
+
+                    card.innerHTML = `
+                        <div id="sent-container-${pIdx}-${sIdx}" class="atayal-text mb-4 font-bold text-gray-900">
+                            <span class="inline-flex items-center justify-center bg-gradient-to-b ${numClass} border-b-4 shadow-sm font-black text-sm px-2.5 py-1 rounded-lg mr-3 select-none">${pIdx + 1}_${sIdx + 1}</span>${wrapWordsForHighlight(item.at)}
+                        </div>
+                        <div id="zh-${pIdx}-${sIdx}" class="chinese-text hidden-zh mb-5 py-3 px-4 bg-gray-50 rounded-lg border-l-4 border-gray-400 italic font-medium">${item.zh}</div>
+                        <div class="flex flex-wrap gap-4 mt-2">
+                            <button onclick="playFile('${finalAudioFile}', 'sent-container-${pIdx}-${sIdx}', ${isEven})" class="btn-control ${voiceBtnClass} text-white shadow-md hover:scale-105 transition-transform"><i class="${isEven ? 'fas fa-female' : 'fas fa-male'} text-lg"></i> ${isEven ? '女聲原音' : '男聲原音'}</button>
+                            <button onclick="toggleZh(${pIdx}, ${sIdx})" class="btn-control bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"><i class="fas fa-language text-lg"></i> 中文對照</button>
+                        </div>
+                    `;
+                    contentDiv.appendChild(card);
+                });
+            });
+            document.querySelectorAll('.speed-sync').forEach(sel => sel.value = "1.0");
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('article-view').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_iAAYzblkxf4BbELhdpyicgqcorjko1k",
+            authDomain: "kagiyyawiy-audio.firebaseapp.com",
+            projectId: "kagiyyawiy-audio",
+            storageBucket: "kagiyyawiy-audio.firebasestorage.app",
+            messagingSenderId: "314079410619",
+            appId: "1:314079410619:web:970b3b9e466d4ec1ba2c9e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
+
+        window.submitSuggestionToFirebase = async function(data) {
+            try { await addDoc(collection(window.db, "suggestions"), data); return true; } 
+            catch (e) { console.error(e); return false; }
+        };
+
+        window.loadAdminSuggestions = async function() {
+            try {
+                const q = query(collection(window.db, "suggestions"), orderBy("timestamp", "desc"));
+                const snap = await getDocs(q);
+                
+                ['word','sentence','audio'].forEach(type => {
+                    const el = document.getElementById(`${type}-suggestions-list`);
+                    if(el) el.innerHTML = '';
+                });
+                
+                let counts = { word: 0, sentence: 0, audio: 0 };
+                
+                snap.forEach((doc) => {
+                    const d = doc.data();
+                    let html = `<div class="bg-white p-4 mb-3 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-gray-600 mb-1 font-bold text-sm"><i class="fas fa-user-circle"></i> ${d.name} <span class="text-xs font-normal">(${d.email})</span><br><span class="text-xs text-emerald-600 mt-1 block"><i class="fas fa-book-open"></i> ${d.articleTitle}</span></p>
+                        <div class="mt-3 bg-gray-50 p-2 rounded border border-gray-100"><span class="text-xs text-gray-500 block">原文：</span><p class="font-bold text-gray-800">${d.originalText}</p></div>`;
+                    
+                    if (d.type !== 'audio') html += `<div class="mt-2 bg-blue-50 p-2 rounded border border-blue-100"><span class="text-xs text-blue-500 block">建議：</span><p class="text-blue-700 font-bold">${d.suggestedText || '無'}</p></div>`;
+                    html += `<p class="text-gray-500 mt-2 text-sm"><i class="fas fa-comment-dots"></i> ${d.reason}</p>`;
+                    if (d.type === 'audio' && d.audioBase64) html += `<div class="mt-3"><span class="text-xs text-rose-500 font-bold block mb-1"><i class="fas fa-play-circle"></i> 建議原音：</span><audio controls src="${d.audioBase64}" class="w-full h-10 rounded-full"></audio></div>`;
+                    html += `</div>`;
+                    
+                    const list = document.getElementById(`${d.type}-suggestions-list`);
+                    if (list) { list.innerHTML += html; counts[d.type]++; }
+                });
+                
+                ['word','sentence','audio'].forEach(type => {
+                    if(counts[type] === 0) {
+                        const el = document.getElementById(`${type}-suggestions-list`);
+                        if(el) el.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-gray-400"><i class="fas fa-inbox text-4xl mb-3 opacity-50"></i><p class="font-bold">目前無新建議</p></div>`;
+                    }
+                });
+                
+            } catch (error) { console.error(error); }
+        };
+    </script>
+
+    <script>
+        function openAdminModal() {
+            document.getElementById('admin-pwd').value = '';
+            document.getElementById('admin-error').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('admin-pwd').focus(), 100);
+        }
+        function closeAdminModal() { document.getElementById('admin-modal').classList.add('hidden'); }
+        
+        function verifyAdmin() {
+            if(document.getElementById('admin-pwd').value === '660828') {
+                closeAdminModal();
+                showToast('密碼正確！歡迎進入管理平臺');
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById('admin-dashboard-view').classList.add('active');
+                if(window.loadAdminSuggestions) window.loadAdminSuggestions();
+            } else {
+                document.getElementById('admin-error').classList.remove('hidden');
+            }
+        }
+        document.getElementById('admin-pwd').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verifyAdmin();
+        });
+    </script>
+</body>
+</html>
